@@ -26,6 +26,9 @@ $ -> Language fix or change
 - -> Removed
 ! -> Note
 
+2010-12-07 Christophe Demko
+ + Adding helpers
+
 2010-12-05 Christophe Demko
  ! Creating project
 

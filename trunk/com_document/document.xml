@@ -41,6 +41,7 @@
 		<filename>index.html</filename>
 		<filename>document.php</filename>
 		<filename>controller.php</filename>
+		<filename>helpers.php</filename>
 		<folder>views</folder>
 		<folder>models</folder>
 		<folder>language</folder>
@@ -78,6 +79,7 @@
 			<filename>access.xml</filename>
 			<filename>document.php</filename>
 			<filename>controller.php</filename>
+			<filename>helpers.php</filename>
 			<!-- SQL files section -->
 			<folder>sql</folder>
 			<!-- tables files section -->

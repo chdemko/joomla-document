@@ -44,7 +44,7 @@
 		<filename>helpers.php</filename>
 		<folder>views</folder>
 		<folder>models</folder>
-		<folder>language</folder>
+		<folder>helpers</folder>
 	</files>
 
 	<media destination="com_document" folder="media">

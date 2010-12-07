@@ -47,6 +47,11 @@
 		<folder>helpers</folder>
 	</files>
 
+	<languages folder="site">
+		<language tag="en-GB">language/en-GB/en-GB.com_document.ini</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.com_document.ini</language>
+	</languages>
+
 	<media destination="com_document" folder="media">
 		<filename>index.html</filename>
 		<folder>images</folder>

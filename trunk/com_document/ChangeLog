@@ -28,6 +28,7 @@ $ -> Language fix or change
 
 2010-12-07 Christophe Demko
  + Adding helpers.php files in the xml
+ + Adding language files to the public part
 
 2010-12-07 Christophe Demko
  + Adding helpers

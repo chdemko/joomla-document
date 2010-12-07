@@ -16,7 +16,7 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.database.table');
 
 /**
- * Docuemnt Table class of Document component
+ * Document Table class of Document component
  */
 class DocumentTableDocument extends JTable
 {

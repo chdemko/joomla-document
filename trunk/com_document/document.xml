@@ -8,7 +8,7 @@
 	<copyright>Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.</copyright>
 	<authorEmail>document@chdemko.com</authorEmail>
 	<authorUrl>www.chdemko.com</authorUrl>
-	<license>License GNU General Public License version 2 or later</license>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html</license>
 	<!--  The version string is recorded in the components table -->
 	<version>0.0.1</version>
 	<!-- The description is optional and defaults to the name -->

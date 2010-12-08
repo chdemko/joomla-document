@@ -1,3 +1,6 @@
 all:
-	zip -r `basename $(CURDIR)`-`cat ../VERSION`.zip admin site media document.xml script.php ChangeLog LICENSE.txt CREDITS.txt -i "*.php" -i "*.html" -i "*.sql" -i "*.xml" -i "*.ini" -i "*.js" -i "*.css" -i "*.png"
+	zip -ru `basename $(CURDIR)`-`cat ../VERSION`.zip * -x \*~ -x \*.svn\*
+
+clean:
+	rm `basename $(CURDIR)`-`cat ../VERSION`.zip
 

@@ -28,6 +28,7 @@ $ -> Language fix or change
 
 2010-12-08 Christophe Demko
  + Adding category and categories models
+ + Adding upload view in admin
 
 2010-12-07 Christophe Demko
  + Adding helpers.php files in the xml

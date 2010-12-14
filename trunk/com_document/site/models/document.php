@@ -94,14 +94,14 @@ class DocumentModelDocument extends JModelItem
 					',a.language '.
 					',a.featured '.
 					',a.ordering '.
-					',a.published_up '.
-					',a.published_down '.
-					',a.access '.
-					',a.checked_out '.
-					',a.checked_out_time '.
 					// If badcats is not null, this means that the document is inside an unpublished category
 					// In this case, the state is set to 0 to indicate Unpublished (even if the document state is Published)
-					'CASE WHEN badcats.id is null THEN a.published ELSE 0 END AS published ' 
+					',CASE WHEN badcats.id is null THEN a.published ELSE 0 END AS published '.
+					',a.publish_up '.
+					',a.publish_down '.
+					',a.access '.
+					',a.checked_out '.
+					',a.checked_out_time '
 					)
 				);
 				$query->from('#__document AS a');
@@ -145,6 +145,7 @@ class DocumentModelDocument extends JModelItem
 				}
 
 				$db->setQuery($query);
+				echo nl2br(str_replace('#__','jos_',$query));
 
 				$data = $db->loadObject();
 

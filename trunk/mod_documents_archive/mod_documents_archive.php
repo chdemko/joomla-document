@@ -12,5 +12,10 @@
 defined('_JEXEC') or die;
 
 JLoader::register('modDocumentsArchiveHelper', dirname(__FILE__) . DS . 'helper.php');
+// Include the syndicate functions only once
+//require_once dirname(__FILE__).DS.'helper.php';
+
+$params->def('count', 10);
+$list = modDocumentsArchiveHelper::getList($params);
 
 require JModuleHelper::getLayoutPath('mod_documents_archive', $params->get('layout', 'default'));

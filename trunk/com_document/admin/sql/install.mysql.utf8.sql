@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `#__document` (
   `filename` varchar(255) NOT NULL default '' COMMENT 'Document- Link',
   `mime`  varchar(255) NOT NULL default '' COMMENT 'Document- Title',
   `catid` int NOT NULL default'0' COMMENT 'Category- Number',
-  `created` date '0000-00-00 00:00:00'COMMENT 'Creating - date',
+  `created` date default '0000-00-00 00:00:00'COMMENT 'Creating - date',
   `created_by` int NOT NULL default'0',
   `created_by_alias` varchar(255) NOT NULL,
   `modified` date default '0000-00-00 00:00:00' ,

@@ -114,18 +114,10 @@ class DocumentModelDocument extends JModelItem
 				$query->select('u.name AS author');
 				$query->join('LEFT', '#__users AS u on u.id = a.created_by');
 
-				// Join on contact table
-				$query->select('contact.id as contactid' ) ;
-				$query->join('LEFT','#__contact_details AS contact on contact.user_id = a.created_by');
-				
 				
 				// Join over the categories to get parent category titles
 				$query->select('parent.title as parent_title, parent.id as parent_id, parent.path as parent_route, parent.alias as parent_alias');
 				$query->join('LEFT', '#__categories as parent ON parent.id = c.parent_id');
-
-				// Join on voting table
-				$query->select('ROUND( v.rating_sum / v.rating_count ) AS rating, v.rating_count as rating_count');
-				$query->join('LEFT', '#__document_rating AS v ON a.id = v.document_id');
 
 				$query->where('a.id = ' . (int) $pk);
 
@@ -149,7 +141,7 @@ class DocumentModelDocument extends JModelItem
 				$archived = $this->getState('filter.archived');
 
 				if (is_numeric($published)) {
-					$query->where('(a.state = ' . (int) $published . ' OR a.state =' . (int) $archived . ')');
+					$query->where('(a.published = ' . (int) $published . ' OR a.published =' . (int) $archived . ')');
 				}
 
 				$db->setQuery($query);
@@ -174,7 +166,7 @@ class DocumentModelDocument extends JModelItem
 				$registry->loadJSON($data->attribs);
 				$data->params = clone $this->getState('params');
 				$data->params->merge($registry);
-published
+
 				$registry = new JRegistry;
 				$registry->loadJSON($data->metadata);
 				$data->metadata = $registry;
@@ -261,53 +253,4 @@ published
 
             return true;
 	}
-
-    public function storeVote($pk = 0, $rate = 0)
-    {
-        if ( $rate >= 1 && $rate <= 5 && $pk > 0 )
-        {
-            $userIP = $_SERVER['REMOTE_ADDR'];
-            $db = $this->getDbo();
-
-            $db->setQuery(
-                    'SELECT *' .
-                    ' FROM #__document_rating' .
-                    ' WHERE document_id = '.(int) $pk
-            );
-
-            $rating = $db->loadObject();
-
-            if (!$rating)
-            {
-                // There are no ratings yet, so lets insert our rating
-                $db->setQuery(
-                        'INSERT INTO #__document_rating ( document_id, lastip, rating_sum, rating_count )' .
-                        ' VALUES ( '.(int) $pk.', '.$db->Quote($userIP).', '.(int) $rate.', 1 )'
-                );
-
-                if (!$db->query()) {
-                        $this->setError($db->getErrorMsg());
-                        return false;
-                }
-            } else {
-                if ($userIP != ($rating->lastip))
-                {
-                    $db->setQuery(
-                            'UPDATE #__document_rating' .
-                            ' SET rating_count = rating_count + 1, rating_sum = rating_sum + '.(int) $rate.', lastip = '.$db->Quote($userIP) .
-                            ' WHERE document_id = '.(int) $pk
-                    );
-                    if (!$db->query()) {
-                            $this->setError($db->getErrorMsg());
-                            return false;
-                    }
-                } else {
-                    return false;
-                }
-            }
-            return true;
-        }
-        JError::raiseWarning( 'SOME_ERROR_CODE', 'Document Rating:: Invalid Rating:' .$rate, "JModelDocument::storeVote($rate)");
-        return false;
-    }
 }

@@ -1,13 +1,5 @@
 <?php
-/**
- * @version		$Id$
- * @package		Documents
- * @subpackage	Plugins
- * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
- * @license		http://www.gnu.org/licenses/gpl-2.0.html
- */
 
-//    cd /home/walien/eclipse/workspaces/workspace_u/com_document/plg_content_documentpdf
 
 // No direct access
 defined('_JEXEC') or die;

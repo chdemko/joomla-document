@@ -71,6 +71,8 @@ class plgContentDocumentPDF extends JPlugin
 		$alias = $this->getAlias($title);
 		/*The filename is provided by the media manager component*/
 		$filename = $media->filepath;
+		// if the user use window
+		$filename = str_replace('\\', '\\\\', $filename);		
 		/*The MIME type is provided by the media manager component*/
 		$mime = $media->type;
 		/*The upload date correponds to the current date*/
@@ -251,12 +253,28 @@ class plgContentDocumentPDF extends JPlugin
 		$string = preg_replace('/^[-]+/', '', $string);
 		$string = preg_replace('/[-]+$/', '', $string);
 		$string = preg_replace('/[-]{2,}/', ' ', $string);
-		$string = preg_replace('[ ]', '', $string);
+	
 
+		$string = $this->removeSimpleSpace($string);
+		
+		
 		return $string;
 	}
 
-
+	public function removeSimpleSpace($string)
+	{	
+		for($i = 0 ; $i< count($string) -1; $i++)
+		{
+			if($string[$i] == ' ')
+			{
+				$string[$i] = '';
+				$i++;
+			}
+		}
+		return $string;
+	}
+	
+	
 	public function onContentBeforeDelete($context, &$media)
 	{
 		$app = JFactory::getApplication();

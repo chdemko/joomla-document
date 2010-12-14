@@ -12,15 +12,14 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 ?>
-<div class="width-70 fltlft">
-	<fieldset id="uploadform">
-	<legend><?php echo JText::_('COM_DOCUMENT_UPLOAD'); ?></legend>
-	<label for="install_package"><?php echo JText::_('COM_DOCUMENT_UPLOAD_DOCUMENT'); ?></label>
-		<form action="<?php echo JRoute::_('index.php?option=com_document&view=upload');?>" method="post" action="xxxxxxxxxxxxxx	" enctype="multipart/form-data">   
-			<input type="hidden" name="MAX_FILE_SIZE" value="2097152"></td>   
-			<input type="file" name="file_name">  
-			<input type="submit" value="Upload document">  
-		</form>
+<form action="<?php echo JRoute::_('index.php?option=com_document&view=upload');?>" method="post" action="xxxxxxxxxxxxxx	" enctype="multipart/form-data">
+	<div class="width-70 fltlft">
+		<fieldset id="uploadform">
+		<legend><?php echo JText::_('COM_DOCUMENT_UPLOAD'); ?></legend>
+			<label for="document_directory"><?php echo JText::_('COM_DOCUMENT_UPLOAD_DIRECTORY'); ?></label>			
+			<input class="input_box" id="document_directory" name="document_directory" type="file" size="57" />
+			<input class="button" type="button" value="<?php echo JText::_('COM_DOCUMENT_UPLOAD_DOCUMENT'); ?>" onclick="Joomla.submitbutton()" />
 	</fieldset>
-</div>
+	</div>
+</form>
 <?php

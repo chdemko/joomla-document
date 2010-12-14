@@ -24,16 +24,32 @@ jimport('joomla.plugin.plugin');
 
 class plgContentDocumentPDF extends JPlugin
 {
+
 	public function onContentAfterDelete($context, &$media)
 	{
 		$app = JFactory::getApplication();
-		JError::raiseNotice( 100, "CONTENT_AFTER_DELETE");
+
+		if($context!="com_media.file"){
+			return true;
+		}
+
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(true);
+
+		$query = "DELETE FROM  #__document WHERE filename = '$media->filepath'";
+
+		$db->setQuery( $query );
+		$db->query();
 		return true;
 	}
 
 	public function onContentAfterSave($context, &$media)
 	{
 		$app = JFactory::getApplication();
+
+		if($context!="com_media.file"){
+			return true;
+		}
 
 		/*VERIFYING THAT THE FILE IS A PDF*/
 		if($media->type != "application/pdf") {
@@ -43,13 +59,95 @@ class plgContentDocumentPDF extends JPlugin
 
 		$metas = $this->getMetadata($media->filepath);
 
-		JError::raiseNotice(100, "TITLE : ".$metas['title']);
-		JError::raiseNotice(100, "SUBJECT : ". $metas['subject']);
-		JError::raiseNotice(100, "AUTHOR : ". $metas['author']);
-		JError::raiseNotice(100, "KEYWORDS : ". $metas['keywords']);
-		JError::raiseNotice(100, "CREATION DATE : ". $metas['creationDate']);
+		/*The title is contained into PDF metadatas*/
+		$title = $metas['title'];
+		/*Keywords are contained into PDF metadatas*/
+		$keywords = $metas['keywords'];
+		/*The description is contained into PDF metadatas*/
+		$description = $metas['subject'];
+		/*The author is contained into PDF metadatas*/
+		$author = $metas['author'];
+		/*The alias is obtained from the title*/
+		$alias = $this->getAlias($title);
+		/*The filename is provided by the media manager component*/
+		$filename = $media->filepath;
+		/*The MIME type is provided by the media manager component*/
+		$mime = $media->type;
+		/*The upload date correponds to the current date*/
+		$upload_date = JFactory::getDate();
+		/*The user who created the document is provided by Joomla*/
+		$user = JFactory::getUser();
+		$created_by = $user->id;
+		/*The created_by_alias is obtained from the current username*/
+		$created_by_alias = $user->username;
+		/*The creation date is contained into PDF metadatas*/
+		$creationDate = $metas['creationDate'];
+
+		$this->addDocument($title, $keywords, $description, $author, $alias, $filename, $mime, ' ', $upload_date, $created_by,
+		$created_by_alias, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
 
 		return true;
+	}
+
+	/**
+	 * Inserts a document into the database
+	 *
+	 * @param string $title
+	 * @param string $keywords
+	 * @param string $description
+	 * @param string $author
+	 * @param string $alias
+	 * @param string $filename
+	 * @param string $mime
+	 * @param string $catid
+	 * @param date $created
+	 * @param int $created_by
+	 * @param string $created_by_alias
+	 * @param date $modified
+	 * @param int $modified_by
+	 * @param int $hits
+	 * @param string $params
+	 * @param string $language
+	 * @param int $featured
+	 * @param int $ordering
+	 * @param date $published
+	 * @param date $publish_up
+	 * @param int $access_level
+	 * @param int $checked_out
+	 * @param date $checked_out_time
+	 */
+
+
+	public function addDocument($title, $keywords, $description, $author, $alias, $filename, $mime, $catid, $created, $created_by,
+	$created_by_alias, $modified, $modified_by, $hits, $params, $language, $featured, $ordering, $published, $publish_up, $publish_down,$access_level,
+	$checked_out, $checked_out_time)
+	{
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(true);
+
+		$query = "INSERT INTO #__document(id, title, keywords, description, author, alias, filename, mime, catid,
+		created, created_by, created_by_alias, modified, modified_by, hits, params, language, featured, ordering,
+		published, publish_up, publish_down, access, checked_out, checked_out_time) VALUES ('', '".$title."', '".$keywords."',
+		'".$description."', '".$author."', '".$alias."', '".$filename."', '".$mime."', '".$catid."', '".$created."', '".$created_by."',
+		'".$created_by_alias."', '".$modified."','".$modified_by."', '".$hits."', '".$params."', '".$language."', '".$featured."', 
+		'".$ordering."', '".$published."', '".$publish_up."','".$publish_down."', '".$access_level."','".$checked_out."', '".$checked_out_time."')";
+
+		$db->setQuery($query);
+		$db->query();
+	}
+
+	/**
+	 * Returns a unique representation of a string
+	 * @param string $string
+	 */
+
+	public function getAlias($string)
+	{
+		$uppercase = strtoupper($string);
+		$no_space = str_replace(' ','_',$uppercase);
+		srand(time());
+		$random = (rand()%1000);
+		return $no_space."_".$random;
 	}
 
 	/**
@@ -162,6 +260,10 @@ class plgContentDocumentPDF extends JPlugin
 	public function onContentBeforeDelete($context, &$media)
 	{
 		$app = JFactory::getApplication();
+
+		if($context!="com_media.file"){
+			return true;
+		}
 		JError::raiseNotice( 100, "CONTENT_BEFORE_DELETE");
 		return true;
 	}
@@ -169,6 +271,10 @@ class plgContentDocumentPDF extends JPlugin
 	public function onContentBeforeSave($context, &$media)
 	{
 		$app = JFactory::getApplication();
+
+		if($context!="com_media.file"){
+			return true;
+		}
 		JError::raiseNotice( 100, "CONTENT_BEFORE_SAVE");
 		return true;
 	}
@@ -176,12 +282,20 @@ class plgContentDocumentPDF extends JPlugin
 	public function onContentAfterDisplay($context, &$media)
 	{
 		$app = JFactory::getApplication();
+
+		if($context!="com_media.file"){
+			return true;
+		}
 		return "";
 	}
 
 	public function onContentBeforeDisplay($context, &$media)
 	{
 		$app = JFactory::getApplication();
+
+		if($context!="com_media.file"){
+			return true;
+		}
 		return "";
 	}
 }

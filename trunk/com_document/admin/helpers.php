@@ -12,4 +12,8 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
+JLoader::register('DocumentHelper', dirname(__FILE__) . '/helpers/document.php');
+
+
+
 

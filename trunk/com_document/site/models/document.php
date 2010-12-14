@@ -76,6 +76,7 @@ class DocumentModelDocument extends JModelItem
 				$query->select($this->getState(
 					'item.select', 
 					'a.id '.
+					',a.asset_id '.
 					',a.title '.
 					',a.keywords '.
 					',a.description '.

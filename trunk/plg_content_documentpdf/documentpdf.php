@@ -28,7 +28,12 @@ class plgContentDocumentPDF extends JPlugin
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
 
-		$query = "DELETE FROM  #__document WHERE filename = '$media->filepath'";
+		$filename = $media->filepath;
+		// if the user use window
+		$filename = str_replace('\\', '\\\\', $filename);	
+	
+	
+		$query = "DELETE FROM  #__document WHERE filename = '$filename'";
 
 		$db->setQuery( $query );
 		$db->query();

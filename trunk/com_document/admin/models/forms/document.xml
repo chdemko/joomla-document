@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- $Id$ -->
+<form>
+   <fieldset name="details">
+       <field
+           name="id"
+           type="hidden"
+       />
+
+       <field
+			name="title"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_TITLE_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_TITLE_DESC"
+			default=""
+			class=""
+			required=""
+		/>
+
+       <field
+			name="keywords"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_KEYWORDS_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_KEYWORDS_DESC"
+			default=""
+			class=""
+			required=""
+		/>
+
+       <field
+			name="description"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_DESCRIPTION_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_DESCRIPTION_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="author"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_AUTHOR_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_AUTHOR_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="alias"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_ALIAS_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_ALIAS_TITLE_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="filename"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_FILENAME_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_FILENAME_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="mime"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_MIME_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_MIME_DESC"
+			default=""
+			class=""
+			required=""
+		/>           
+
+		<field
+			name="catid"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_CATID_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_CATID_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="created"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_CREATED_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_CREATED_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="created_by"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_CREATED_BY_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_CREATED_BY_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="created_by_alias"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_CREATED_BY_ALIAS_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_CREATED_BY_ALIAS_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="modified"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_MODIFIED_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_MODIFIED_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="modified_by"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_MODIFIED_BY_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_MODIFIED_BY_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="hits"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_HITS_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_HITS_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="params"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_PARAMS_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_PARAMS_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="language"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_LANGUAGE_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_LANGUAGE_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="featured"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_FEATURED_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_FEATURED_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="ordering"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_ORDERING_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_ORDERING_DESC"
+			default=""
+			class=""
+			required=""
+		/>           
+
+		<field
+			name="published"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_PUBLISHED_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_PUBLISHED_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="publish_up"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_PUBLISH_UP_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_PUBLISH_UP_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="publish_down"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_PUBLISH_DOWN_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_PUBLISH_DOWN_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="access"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_ACCESS_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_ACCESS_DESC"
+			default=""
+			class=""
+			required=""
+		/>       
+
+		<field
+			name="checked_out"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_CHECKED_OUT_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_CHECKED_OUT_DESC"
+			default=""
+			class=""
+			required=""
+		/>    
+   
+		<field
+			name="checked_out_time"
+			type=""
+			label="COM_DOCUMENT_DOCUMENT_FIELD_CHECKED_OUT_TIME_LABEL"
+			description="COM_DOCUMENT_DOCUMENT_FIELD_CHECKED_OUT_TIME_DESC"
+			default=""
+			class=""
+			required=""
+		/>
+   </fieldset>
+   <fields name="params">
+       <fieldset
+           name="params"
+           label="JGLOBAL_FIELDSET_DISPLAY_OPTIONS"
+       >
+       </fieldset>
+   </fields>
+</form>

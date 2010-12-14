@@ -29,7 +29,7 @@ class plgContentDocumentPDF extends JPlugin
 	{
 		$app = JFactory::getApplication();
 
-		if($context!="com_media.file"){
+		if($context!="com_media.file" && $context!="com_document.file"){
 			return true;
 		}
 
@@ -47,7 +47,7 @@ class plgContentDocumentPDF extends JPlugin
 	{
 		$app = JFactory::getApplication();
 
-		if($context!="com_media.file"){
+		if($context!="com_media.file" && $context!="com_document.file"){
 			return true;
 		}
 
@@ -261,7 +261,7 @@ class plgContentDocumentPDF extends JPlugin
 	{
 		$app = JFactory::getApplication();
 
-		if($context!="com_media.file"){
+		if($context!="com_media.file" && $context!="com_document.file"){
 			return true;
 		}
 		JError::raiseNotice( 100, "CONTENT_BEFORE_DELETE");
@@ -272,7 +272,7 @@ class plgContentDocumentPDF extends JPlugin
 	{
 		$app = JFactory::getApplication();
 
-		if($context!="com_media.file"){
+		if($context!="com_media.file" && $context!="com_document.file"){
 			return true;
 		}
 		JError::raiseNotice( 100, "CONTENT_BEFORE_SAVE");
@@ -283,7 +283,7 @@ class plgContentDocumentPDF extends JPlugin
 	{
 		$app = JFactory::getApplication();
 
-		if($context!="com_media.file"){
+		if($context!="com_media.file" && $context!="com_document.file"){
 			return true;
 		}
 		return "";
@@ -293,7 +293,7 @@ class plgContentDocumentPDF extends JPlugin
 	{
 		$app = JFactory::getApplication();
 
-		if($context!="com_media.file"){
+		if($context!="com_media.file" && $context!="com_document.file"){
 			return true;
 		}
 		return "";

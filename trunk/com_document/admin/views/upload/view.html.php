@@ -21,18 +21,18 @@ jimport('joomla.application.component.view');
 class DocumentViewUpload extends JView
 {
 	/**
-	 * @since	1.6
+	 * @since	1.5
 	 */
 	function __construct($config = null)
 	{
 		$app = JFactory::getApplication();
 		parent::__construct($config);
 		$this->_addPath('template', $this->_basePath.DS.'views'.DS.'default'.DS.'tmpl');
-		$this->_addPath('template', JPATH_BASE.'/templates/'.$app->getTemplate().'/html/com_installer/default');
+		$this->_addPath('template', JPATH_BASE.'/templates/'.$app->getTemplate().'/html/com_document/default');
 	}
 
 	/**
-	 * @since	1.6
+	 * @since	1.5
 	 */
 	function display($tpl=null)
 	{
@@ -66,7 +66,7 @@ class DocumentViewUpload extends JView
 		JToolBarHelper::title(JText::_('COM_DOCUMENT_UPLOAD_TITLE'), 'install.png');
 
 		if ($canDo->get('core.admin')) {
-			JToolBarHelper::preferences('com_installer');
+			JToolBarHelper::preferences('com_document');
 			JToolBarHelper::divider();
 		}
 

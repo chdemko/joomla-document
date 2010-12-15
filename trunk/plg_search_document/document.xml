@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- $Id$ -->
 <extension version="1.6" type="plugin" group="content">
-	<name>plg_content_documentpdf</name>
+	<name>plg_search_document</name>
 	<author>Master ICONE</author>
 	<creationDate>December 2010</creationDate>
 	<copyright>Copyright (C) 2010 - today. Master ICONE, University of La Rochelle, France</copyright>
@@ -9,10 +9,9 @@
 	<authorEmail>document@chdemko.com</authorEmail>
 	<authorUrl>www.chdemko.com</authorUrl>
 	<version>0.0.1</version>
-	<description>PLG_CONTENT_DOCUMENTPDF_XML_DESCRIPTION</description>
+	<description>plg_search_document_XML_DESCRIPTION</description>
 
 	<files>
-		<folder>Zend</folder>
 		<filename plugin="documentpdf">document.php</filename>
 		<filename>index.html</filename>
 	</files>

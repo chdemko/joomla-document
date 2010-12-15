@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- $Id$ -->
-<extension version="1.6" type="plugin" group="content">
+<extension version="1.6" type="plugin" group="search">
 	<name>plg_search_document</name>
 	<author>Master ICONE</author>
 	<creationDate>December 2010</creationDate>

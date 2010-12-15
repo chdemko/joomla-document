@@ -7,11 +7,12 @@
  * @license		http://www.gnu.org/licenses/gpl-2.0.html
  */
 
+//     cd /home/walien/eclipse/workspaces/workspace_u/com_document/plg_search_document
+
 // No direct access
 defined('_JEXEC') or die;
 
 jimport('joomla.plugin.plugin');
-
 
 /**
  * Document Search Plugin
@@ -23,7 +24,10 @@ class plgSearchDocument extends JPlugin
 	 */
 	function onContentSearchAreas()
 	{
-		return array();
+		static $areas = array(
+                'plg_search_document' => 'Documents'
+                );
+                return $areas;
 	}
 
 	/**
@@ -37,24 +41,82 @@ class plgSearchDocument extends JPlugin
 	 */
 	function onContentSearch($text, $phrase='', $ordering='', $areas=null)
 	{
-
-		echo "Recherche OK";
-		exit();
-
 		$db = JFactory::getDBO();
-		$query = $db->getQuery(true);
 
+		//Return Array when nothing was filled in.
+		if ($text == '') {
+			return array();
+		}
 
-		$query_title = 'SELECT title FROM #__document';
+		$wheres = array();
+		switch ($phrase) {
+			//search exact
+			case 'exact':
+				$text        = $db->Quote( '%'.$db->getEscaped( $text, true ).'%', false );
+				$wheres2     = array();
+				$wheres2[]   = 'LOWER(d.title) LIKE '.$text.' OR LOWER(d.keywords) LIKE '.$text.' OR LOWER(d.description) LIKE '.$text.' OR LOWER(d.author) LIKE '.$text.' OR LOWER(d.filename) LIKE '.$text;
+				$where       = '(' . implode( ') OR (', $wheres2 ) . ')';
+				break;
 
+				//search all
+			case 'all':
+				$words         = explode( ' ', $text );
+				$wheres = array();
+				foreach ($words as $word)
+				{
+					$word      = $db->Quote( '%'.$db->getEscaped( $word, true ).'%', false );
+					$wheres2   = array();
+					$wheres2[] = '(LOWER(d.title) LIKE '.$word.' OR LOWER(d.keywords) LIKE '.$word.' OR LOWER(d.description) LIKE '.$word.' OR LOWER(d.author) LIKE '.$word.' OR LOWER(d.filename) LIKE '.$word.')';
+					$wheres[]  = implode( ' AND ', $wheres2 );
+				}
+				$where = '(' . implode( ($phrase == 'all' ? ') AND (' : ') OR ('), $wheres ) . ')';
+				break;
+			case 'any':
+			default:
+				$words  = explode( ' ', $text );
+				$wheres = array();
+				foreach ($words as $word)
+				{
+					$word          = $db->Quote( '%'.$db->getEscaped( $word, true ).'%', false );
+					$wheres2       = array();
+					$wheres2[] = '(LOWER(d.title) LIKE '.$word.' OR LOWER(d.keywords) LIKE '.$word.' OR LOWER(d.description) LIKE '.$word.' OR LOWER(d.author) LIKE '.$word.' OR LOWER(d.filename) LIKE '.$word.')';
+					$wheres[]    = implode( ' OR ', $wheres2 );
+				}
+				$where = '(' . implode( ($phrase == 'all' ? ') AND (' : ') OR ('), $wheres ) . ')';
+				break;
+		}
 
-		$db->setQuery($query_title);
-		$result = $db->loadResult();
+		//ordering of the results
+		switch ( $ordering ) {
+			//alphabetic, ascending
+			case 'alpha':
+				$order = 'd.title ASC';
+				break;
+				//oldest first
+			case 'oldest':
+				//popular first
+			case 'popular':
+				//newest first
+			case 'newest':
+				//default setting: alphabetic, ascending
+			default:
+				$order = 'd.title ASC';
+		}
 
-		echo $result;
+		$query = 'SELECT d.title AS title, d.description AS text, d.created AS created'
+		. ' FROM #__document AS d'
+		. ' WHERE ( '. $where .' )'
+		;
 
+		//Set query
+		$db->setQuery($query);
+		$rows = $db->loadObjectList();
 
-		return array();
+		foreach($rows as $key => $row) {
+			$rows[$key]->href = 'index.php?option=com_document?id='.$row->catslug.'&id='.$row->slug;
+			$rows[$key]->section= '';
+			$rows[$key]->browsernav= '1';
+		}
+		return $rows;
 	}
 }
-

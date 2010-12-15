@@ -16,7 +16,7 @@ defined('_JEXEC') or die('Restricted access');
 	<div class="width-70 fltlft">
 		<fieldset id="uploadform">
 		<legend><?php echo JText::_('COM_DOCUMENT_UPLOAD'); ?></legend>
-			<label for="document_directory"><?php echo JText::_('COM_DOCUMENT_UPLOAD_DIRECTORY'); ?></label>			
+			<label for="document_directory"><?php echo JText::_('COM_DOCUMENT_UPLOAD_DIRECTORY'); ?>&nbsp;&nbsp;</label>			
 			<input class="input_box" id="document_directory" name="document_directory" type="file" size="57" />
 			<input class="button" type="button" value="<?php echo JText::_('COM_DOCUMENT_UPLOAD_DOCUMENT'); ?>" onclick="Joomla.submitbutton()" />
 	</fieldset>

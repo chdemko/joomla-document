@@ -12,6 +12,7 @@ defined('_JEXEC') or die;
 
 jimport('joomla.plugin.plugin');
 
+
 /**
  * Document Search Plugin
  */
@@ -36,6 +37,19 @@ class plgSearchDocument extends JPlugin
 	 */
 	function onContentSearch($text, $phrase='', $ordering='', $areas=null)
 	{
+		$db = JFactory::getDBO();
+		$query = $db->getQuery(true);
+
+
+		$query_title = 'SELECT title FROM #__document';
+
+
+		$db->setQuery($query_title);
+		$result = $db->loadResult();
+ 
+		echo $result
+		
+
 		return array();
 	}
 }

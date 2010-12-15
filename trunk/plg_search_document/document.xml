@@ -9,7 +9,7 @@
 	<authorEmail>document@chdemko.com</authorEmail>
 	<authorUrl>www.chdemko.com</authorUrl>
 	<version>0.0.1</version>
-	<description>plg_search_document_XML_DESCRIPTION</description>
+	<description>PLG_SEARCH_DOCUMENT_XML_DESCRIPTION</description>
 
 	<files>
 		<filename plugin="documentpdf">document.php</filename>

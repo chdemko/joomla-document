@@ -37,6 +37,10 @@ class plgSearchDocument extends JPlugin
 	 */
 	function onContentSearch($text, $phrase='', $ordering='', $areas=null)
 	{
+
+		echo "Recherche OK";
+		exit();
+
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
 
@@ -46,9 +50,9 @@ class plgSearchDocument extends JPlugin
 
 		$db->setQuery($query_title);
 		$result = $db->loadResult();
- 
-		echo $result
-		
+
+		echo $result;
+
 
 		return array();
 	}

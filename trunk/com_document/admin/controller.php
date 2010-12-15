@@ -27,7 +27,12 @@ class DocumentController extends JController
 	 */
 	function display($cachable = false) 
 	{
+		JRequest::setVar('view', JRequest::getCmd('view', 'Documents'));
 		// call parent behavior
 		parent::display($cachable);
+		
+
+		// Set the submenu
+		HelloWorldHelper::addSubmenu('messages');
 	}
 }

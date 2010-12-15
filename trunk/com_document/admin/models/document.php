@@ -56,7 +56,7 @@ public function getTable($type = 'Document', $prefix = 'DocumentTable', $config 
 
 
 //Returns information about a specific file - Retourne les données d’un fichier spécifique
-protected function getSItem()
+public function getItem()
     {
       // Create a new query object.
       $db = JFactory::getDBO();
@@ -69,7 +69,7 @@ $query->select('id,title,keywords,description,author,alias,filename,mime,catid,c
          // From the document table
          $query->from('#__document');
 
-$query->where(‘id = ‘.(int)$id);
+$query->where('id ='.(int)$id);
 
 
 

@@ -13,13 +13,13 @@
 
 	<files>
 		<folder>Zend</folder>
-		<filename plugin="documentpdf">documentpdf.php</filename>
+		<filename plugin="documentpdf">document.php</filename>
 		<filename>index.html</filename>
 	</files>
 
 	<languages>
-		<language tag="en-GB">language/en-GB/en-GB.plg_content_documentpdf.ini</language>
-		<language tag="en-GB">language/en-GB/en-GB.plg_content_documentpdf.sys.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.plg_search_document.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.plg_search_document.sys.ini</language>
 		<language tag="fr-FR">language/fr-FR/fr-FR.plg_content_documentpdf.ini</language>
 		<language tag="fr-FR">language/fr-FR/fr-FR.plg_content_documentpdf.sys.ini</language>
 	</languages>

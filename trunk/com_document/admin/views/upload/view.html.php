@@ -21,11 +21,57 @@ jimport('joomla.application.component.view');
 class DocumentViewUpload extends JView
 {
 	/**
-	 * Upload view display method
+	 * @since	1.6
 	 */
-	public function display($tpl = null) 
+	function __construct($config = null)
 	{
-		// Display the template
+		$app = JFactory::getApplication();
+		parent::__construct($config);
+		$this->_addPath('template', $this->_basePath.DS.'views'.DS.'default'.DS.'tmpl');
+		$this->_addPath('template', JPATH_BASE.'/templates/'.$app->getTemplate().'/html/com_installer/default');
+	}
+
+	/**
+	 * @since	1.6
+	 */
+	function display($tpl=null)
+	{
+		// Get data from the model
+		$state	= $this->get('State');
+
+		// Are there messages to display ?
+		$showMessage	= false;
+		if (is_object($state)) {
+			$message1		= $state->get('message');
+			$message2		= $state->get('extension_message');
+			$showMessage	= ($message1 || $message2);
+		}
+
+		$this->assign('showMessage',	$showMessage);
+		$this->assignRef('state',		$state);
+
+		JHtml::_('behavior.tooltip');
+		$this->addToolbar();
 		parent::display($tpl);
+	}
+
+	/**
+	 * Add the page title and toolbar.
+	 *
+	 * @since	1.6
+	 */
+	protected function addToolbar()
+	{
+		$canDo	= documentHelper::getActions();
+		JToolBarHelper::title(JText::_('COM_DOCUMENT_UPLOAD_TITLE'), 'install.png');
+
+		if ($canDo->get('core.admin')) {
+			JToolBarHelper::preferences('com_installer');
+			JToolBarHelper::divider();
+		}
+
+		// Document
+		$document = JFactory::getDocument();
+		$document->setTitle(JText::_('COM_DOCUMENT_UPLOAD_TITLE'));
 	}
 }

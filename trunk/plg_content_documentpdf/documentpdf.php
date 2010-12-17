@@ -87,8 +87,8 @@ class plgContentDocumentPDF extends JPlugin
 		/*The creation date is contained into PDF metadatas*/
 		$creationDate = $metas['creationDate'];
 
-		$this->addDocument($title, $keywords, $description, $author, $alias, $filename, $mime, ' ', $upload_date, $created_by,
-		$created_by_alias, ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+		$this->addDocument($title, $keywords, $description, $author, $alias, $filename, $mime, '0', $upload_date, $created_by,
+		$created_by_alias, ' ', ' ', '0', ' ', ' ', ' ', ' ', '1', ' ', ' ', ' ', ' ', ' ');
 
 		return true;
 	}

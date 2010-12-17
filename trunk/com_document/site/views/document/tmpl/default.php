@@ -22,9 +22,13 @@ defined('_JEXEC') or die;
     <p>
         <?php echo $this->item->author ?> 
     </p>
-    <div><strong>categorie:</strong></div>
+    <div><strong>Description:</strong></div>
     <p>
-        <?php echo $this->item->category ?> 
+        <?php echo $this->item->description ?> 
+    </p>
+	 <div><strong>Keywords:</strong></div>
+    <p>
+        <?php echo $this->item->keywords ?> 
     </p>
 
   <div><strong>language:</strong></div>

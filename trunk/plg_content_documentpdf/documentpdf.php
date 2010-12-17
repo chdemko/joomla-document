@@ -74,6 +74,7 @@ class plgContentDocumentPDF extends JPlugin
 			return true;
 		}
 
+		$component_params = JComponentHelper::getParams('com_content');
 		/*Check if the file is downloaded into the 'Documents' (placed in 'JOOMLA_PATH/images/Documents') folder*/
 		if(strpos(JPATH_BASE, '/')>=0) {
 			$path = explode("/", JPATH_BASE);
@@ -86,7 +87,7 @@ class plgContentDocumentPDF extends JPlugin
 			$path = implode('\\', $path);
 		}
 
-		$url_end = 'images\/'.$this->params->get('documentsPath').'\/';
+		$url_end = 'images\/'.$this->params->get('documentsPath', $component_params->get('documentsPath', 'documents') ).'\/';
 		$path = $path.$url_end;
 
 		/*Checks the file path structure*/
@@ -96,7 +97,6 @@ class plgContentDocumentPDF extends JPlugin
 
 		/*Checks if the file is a PDF file*/
 		if($media->type != "application/pdf") {
-			JError::raiseNotice(100, "DOCUMENT PDF PLUGIN :: THIS DOCUMENT IS NOT A PDF !");
 			return true;
 		}
 

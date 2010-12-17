@@ -13,12 +13,12 @@
 defined('_JEXEC') or die('Restricted access');
 
 // import Joomla controller library
-jimport('joomla.application.component.controller');
+jimport('joomla.application.component.controllerform');
 
 /**
  * Upload Controller of Document component
  */
-class DocumentControllerUpload extends JController
+class DocumentControllerUpload extends JControllerForm
 {
     /**
 	 * @since	1.6
@@ -40,6 +40,45 @@ class DocumentControllerUpload extends JController
 		parent::__construct($config);
 	}
 	
+	/**
+	 * Method override to check if you can add a new record.
+	 *
+	 * @param	array	An array of input data.
+	 *
+	 * @return	boolean
+	 * @since	1.6
+	 */
+	protected function allowAdd($data = array())
+	{
+		// Initialise variables.
+		$user		= JFactory::getUser();
+		$categoryId	= JArrayHelper::getValue($data, 'catid', JRequest::getInt('catid'), 'int');
+		$allow		= null;
+
+		if ($categoryId) {
+			// If the category has been passed in the data or URL check it.
+			$allow	= $user->authorise('core.create', 'com_document.category.'.$categoryId);
+		}
+
+		if ($allow === null) {
+			// In the absense of better information, revert to the component permissions.
+			return parent::allowAdd();
+		}
+		else {
+			return $allow;
+		}
+	}
+	
+	protected function setReturnPage()
+	{
+		$app		= JFactory::getApplication();
+		$context	= "$this->option.edit.$this->context";
+
+		$return = JRequest::getVar('return', null, 'default', 'base64');
+
+		$app->setUserState($context.'.return', $return);
+	}
+	
     /**
 	 * Method to add a new record.
 	 *
@@ -59,20 +98,36 @@ class DocumentControllerUpload extends JController
 		}
 
 		// Clear the record edit information from the session.
-		$app->setUserState($context.'.data',	null);
+		$app->setUserState($context.'.data', null);
+		
+        // if ($this->getModel()->upload()) {
+        if (false) {
+            // Clear the return page.
+    		// TODO: We should be including an optional 'return' variable in the URL.
+    		$this->setReturnPage();
 
-		// Clear the return page.
-		// TODO: We should be including an optional 'return' variable in the URL.
-		$this->setReturnPage();
+    		// ItemID required on redirect for correct Template Style
+    		$redirect = 'index.php?option=com_document&view=form&layout=edit';
+    		if (JRequest::getInt('Itemid') != 0) {
+    			$redirect .= '&Itemid='.JRequest::getInt('Itemid');
+    		}
 
-		// ItemID required on redirect for correct Template Style
-		$redirect = 'index.php?option=com_document&view=form&layout=edit';
-		if (JRequest::getInt('Itemid') != 0) {
-			$redirect .= '&Itemid='.JRequest::getInt('Itemid');
-		}
+    		$this->setRedirect($redirect);
+        } else {
+            // Clear the return page.
+    		// TODO: We should be including an optional 'return' variable in the URL.
+    		$this->setReturnPage();
 
-		$this->setRedirect($redirect);
-
+    		// ItemID required on redirect for correct Template Style
+    		$redirect = 'index.php?option=com_document&view=form&layout=edit';
+    		if (JRequest::getInt('Itemid') != 0) {
+    			$redirect .= '&Itemid='.JRequest::getInt('Itemid');
+    		}
+            
+            $message = JText::sprintf('JLIB_APPLICATION_ERROR_CHECKIN_FAILED', $this->getModel()->getError());
+    		$this->setRedirect($redirect, $message, 'error');
+        }
+        
 		return true;
 	}
 }

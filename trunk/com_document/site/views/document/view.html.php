@@ -23,9 +23,17 @@ class DocumentViewDocument extends JView
 	/**
 	 * Document view display method
 	 */
-	public function display($tpl = null) 
-	{
-		// Display the template
-		parent::display($tpl);
-	}
+	function display( $tpl = null )
+{
+  // Get the model  
+  $model =&$this->getModel();
+ 
+    // Get all of the items
+    $item = $model->getItem();
+    $this->assignRef( 'item', $item );
+  
+  
+  // Display the view
+  parent::display( $tpl );
+}
 }

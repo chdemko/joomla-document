@@ -170,7 +170,10 @@ p	 * Method to auto-populate the model state.
 			// Select state to unpublished if up-path category is unpublished
 			$publishedWhere = 'CASE WHEN badcats.id is null THEN a.published ELSE 0 END';
 		}
+		
+		/* NE MARCHE PAS ???????????
 		$query->join('LEFT OUTER', '(' . $subquery . ') AS badcats ON badcats.id = c.id');
+		*/
 
 		// Filter by access level.
 		if ($access = $this->getState('filter.access')) {

@@ -11,6 +11,11 @@
 // No direct access
 defined('_JEXEC') or die;
 
-JLoader::register('modDocumentsCategoriesHelper', dirname(__FILE__) . DS . 'helper.php');
+require_once dirname(__FILE__).DS.'helper.php';
 
-require JModuleHelper::getLayoutPath('mod_documents_categories', $params->get('layout', 'default'));
+$list = modDocumentsCategoriesHelper::getList($params);
+if (!empty($list)) {
+	$startLevel = reset($list)->getParent()->level;
+	require JModuleHelper::getLayoutPath('mod_documents_categories', $params->get('layout', 'default'));
+}
+

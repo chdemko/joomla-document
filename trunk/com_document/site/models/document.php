@@ -20,10 +20,16 @@ jimport('joomla.application.component.modelitem');
  */
 class DocumentModelDocument extends JModelItem
 {
+	/**
+	 * Model context string.
+	 *
+	 * @var		string
+	 */
+	protected $_context = 'com_document.article';
 
 	/**
 	 * Method to auto-populate the model state.
-	 *document
+	 *
 	 * Note. Calling getState in this method will result in recursion.
 	 *
 	 * @since	1.6
@@ -34,7 +40,7 @@ class DocumentModelDocument extends JModelItem
 
 		// Load state from the request.
 		$pk = JRequest::getInt('id');
-		$this->setState('document.id', $pk);
+		$this->setState('article.id', $pk);
 
 		$offset = JRequest::getInt('limitstart');
 		$this->setState('list.offset', $offset);
@@ -52,16 +58,16 @@ class DocumentModelDocument extends JModelItem
 	}
 
 	/**
-	 * Method to get document data.
+	 * Method to get article data.
 	 *
-	 * @param	integer	The id of the .
+	 * @param	integer	The id of the article.
 	 *
 	 * @return	mixed	Menu item data object on success, false on failure.
 	 */
 	public function &getItem($pk = null)
 	{
 		// Initialise variables.
-		$pk = (!empty($pk)) ? $pk : (int) $this->getState('document.id');
+		$pk = (!empty($pk)) ? $pk : (int) $this->getState('article.id');
 
 		if ($this->_item === null) {
 			$this->_item = array();
@@ -74,35 +80,14 @@ class DocumentModelDocument extends JModelItem
 				$query = $db->getQuery(true);
 
 				$query->select($this->getState(
-					'item.select', 
-					'a.id '.
-					',a.asset_id '.
-					',a.title '.
-					',a.keywords '.
-					',a.description '.
-					',a.author '.
-					',a.alias '.
-					',a.filename '.
-					',a.mime '.
-					',a.catid '.
-					',a.created '.
-					',a.created_by '.
-					',a.created_by_alias '.
-					',a.modified '.
-					',a.modified_by '.
-					',a.hits '.
-					',a.params '.
-					',a.language '.
-					',a.featured '.
-					',a.ordering '.
-					// If badcats is not null, this means that the document is inside an unpublished category
-					// In this case, the state is set to 0 to indicate Unpublished (even if the document state is Published)
-					',CASE WHEN badcats.id is null THEN a.published ELSE 0 END AS published '.
-					',a.publish_up '.
-					',a.publish_down '.
-					',a.access '.
-					',a.checked_out '.
-					',a.checked_out_time '
+					'item.select', 'a.id, a.asset_id, a.title, a.alias, a.title_alias, a.introtext, a.fulltext, ' .
+					// If badcats is not null, this means that the article is inside an unpublished category
+					// In this case, the state is set to 0 to indicate Unpublished (even if the article state is Published)
+					'CASE WHEN badcats.id is null THEN a.state ELSE 0 END AS state, ' .
+					'a.mask, a.catid, a.created, a.created_by, a.created_by_alias, ' .
+					'a.modified, a.modified_by, a.checked_out, a.checked_out_time, a.publish_up, a.publish_down, ' .
+					'a.images, a.urls, a.attribs, a.version, a.parentid, a.ordering, ' .
+					'a.metakey, a.metadesc, a.access, a.hits, a.metadata, a.featured, a.language, a.xreference'
 					)
 				);
 				$query->from('#__document AS a');
@@ -115,10 +100,18 @@ class DocumentModelDocument extends JModelItem
 				$query->select('u.name AS author');
 				$query->join('LEFT', '#__users AS u on u.id = a.created_by');
 
+				// Join on contact table
+				$query->select('contact.id as contactid' ) ;
+				$query->join('LEFT','#__contact_details AS contact on contact.user_id = a.created_by');
+				
 				
 				// Join over the categories to get parent category titles
 				$query->select('parent.title as parent_title, parent.id as parent_id, parent.path as parent_route, parent.alias as parent_alias');
 				$query->join('LEFT', '#__categories as parent ON parent.id = c.parent_id');
+
+				// Join on voting table
+				$query->select('ROUND( v.rating_sum / v.rating_count ) AS rating, v.rating_count as rating_count');
+				$query->join('LEFT', '#__document_rating AS v ON a.id = v.document_id');
 
 				$query->where('a.id = ' . (int) $pk);
 
@@ -130,7 +123,7 @@ class DocumentModelDocument extends JModelItem
 				$query->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
 
 				// Join to check for category published state in parent categories up the tree
-				// If all categories are published, badcats.id will be null, and we just use the document state
+				// If all categories are published, badcats.id will be null, and we just use the article state
 				$subquery = ' (SELECT cat.id as id FROM #__categories AS cat JOIN #__categories AS parent ';
 				$subquery .= 'ON cat.lft BETWEEN parent.lft AND parent.rgt ';
 				$subquery .= 'WHERE parent.extension = ' . $db->quote('com_document');
@@ -142,11 +135,10 @@ class DocumentModelDocument extends JModelItem
 				$archived = $this->getState('filter.archived');
 
 				if (is_numeric($published)) {
-					$query->where('(a.published = ' . (int) $published . ' OR a.published =' . (int) $archived . ')');
+					$query->where('(a.state = ' . (int) $published . ' OR a.state =' . (int) $archived . ')');
 				}
 
 				$db->setQuery($query);
-				echo nl2br(str_replace('#__','jos_',$query));
 
 				$data = $db->loadObject();
 
@@ -155,12 +147,12 @@ class DocumentModelDocument extends JModelItem
 				}
 
 				if (empty($data)) {
-					throw new JException(JText::_('COM_DOCUMENT_ERROR_DOCUMENT_NOT_FOUND'), 404);
+					throw new JException(JText::_('COM_DOCUMENT_ERROR_ARTICLE_NOT_FOUND'), 404);
 				}
 
 				// Check for published state if filter set.
 				if (((is_numeric($published)) || (is_numeric($archived))) && (($data->state != $published) && ($data->state != $archived))) {
-					throw new JException(JText::_('COM_DOCUMENT_ERROR_DOCUMENT_NOT_FOUND'), 404);
+					throw new JException(JText::_('COM_DOCUMENT_ERROR_ARTICLE_NOT_FOUND'), 404);
 				}
 
 				// Convert parameter fields to objects.
@@ -176,14 +168,14 @@ class DocumentModelDocument extends JModelItem
 				// Compute selected asset permissions.
 				$user	= JFactory::getUser();
 
-				// Technically guest could edit an document, but lets not check that to improve performance a little.
+				// Technically guest could edit an article, but lets not check that to improve performance a little.
 				if (!$user->get('guest')) {
 					$userId	= $user->get('id');
-					$asset	= 'com_document.document.'.$data->id;
+					$asset	= 'com_document.article.'.$data->id;
 
 					// Check general edit permission first.
 					if ($user->authorise('core.edit', $asset)) {
-							$data->params->set('access-edit', true);
+						$data->params->set('access-edit', true);
 					}
 					// Now check if edit.own is available.
 					else if (!empty($userId) && $user->authorise('core.edit.own', $asset)) {
@@ -225,9 +217,9 @@ class DocumentModelDocument extends JModelItem
 	}
 
 	/**
-	 * Increment the hit counter for the document.
+	 * Increment the hit counter for the article.
 	 *
-	 * @param	int		Optional primary key of the document to increment.
+	 * @param	int		Optional primary key of the article to increment.
 	 *
 	 * @return	boolean	True if successful; false otherwise and internal error set.
 	 */
@@ -238,7 +230,7 @@ class DocumentModelDocument extends JModelItem
             if ($hitcount)
             {
                 // Initialise variables.
-                $pk = (!empty($pk)) ? $pk : (int) $this->getState('document.id');
+                $pk = (!empty($pk)) ? $pk : (int) $this->getState('article.id');
                 $db = $this->getDbo();
 
                 $db->setQuery(
@@ -255,4 +247,53 @@ class DocumentModelDocument extends JModelItem
 
             return true;
 	}
+
+    public function storeVote($pk = 0, $rate = 0)
+    {
+        if ( $rate >= 1 && $rate <= 5 && $pk > 0 )
+        {
+            $userIP = $_SERVER['REMOTE_ADDR'];
+            $db = $this->getDbo();
+
+            $db->setQuery(
+                    'SELECT *' .
+                    ' FROM #__document_rating' .
+                    ' WHERE document_id = '.(int) $pk
+            );
+
+            $rating = $db->loadObject();
+
+            if (!$rating)
+            {
+                // There are no ratings yet, so lets insert our rating
+                $db->setQuery(
+                        'INSERT INTO #__document_rating ( document_id, lastip, rating_sum, rating_count )' .
+                        ' VALUES ( '.(int) $pk.', '.$db->Quote($userIP).', '.(int) $rate.', 1 )'
+                );
+
+                if (!$db->query()) {
+                        $this->setError($db->getErrorMsg());
+                        return false;
+                }
+            } else {
+                if ($userIP != ($rating->lastip))
+                {
+                    $db->setQuery(
+                            'UPDATE #__document_rating' .
+                            ' SET rating_count = rating_count + 1, rating_sum = rating_sum + '.(int) $rate.', lastip = '.$db->Quote($userIP) .
+                            ' WHERE document_id = '.(int) $pk
+                    );
+                    if (!$db->query()) {
+                            $this->setError($db->getErrorMsg());
+                            return false;
+                    }
+                } else {
+                    return false;
+                }
+            }
+            return true;
+        }
+        JError::raiseWarning( 'SOME_ERROR_CODE', 'Article Rating:: Invalid Rating:' .$rate, "JModelArticle::storeVote($rate)");
+        return false;
+    }
 }

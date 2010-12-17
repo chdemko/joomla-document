@@ -86,7 +86,7 @@ class plgContentDocumentPDF extends JPlugin
 			$path = implode('\\', $path);
 		}
 
-		$url_end = 'images\/documents\/';
+		$url_end = 'images\/'.$this->params->get('documentsPath').'\/';
 		$path = $path.$url_end;
 
 		/*Checks the file path structure*/
@@ -129,10 +129,14 @@ class plgContentDocumentPDF extends JPlugin
 		/*The creation date is contained into PDF metadatas*/
 		$creationDate = $metas['creationDate'];
 
+		/*Retrieves parameters from basic configuration*/
+		$acceslevel = $this->params->get('access');
+		$catid = $this->params->get('catid');
+		$published = $this->params->get('published');
 
 		/*Adds informations concerning the PDF file into the database*/
-		$this->addDocument($title, $keywords, $description, $author, $alias, $filename, $mime, '0', $upload_date, $created_by,
-		$created_by_alias, ' ', ' ', '0', ' ', ' ', ' ', ' ', '1', ' ', ' ', ' ', ' ', ' ');
+		$this->addDocument($title, $keywords, $description, $author, $alias, $filename, $mime, $catid, $upload_date, $created_by,
+		$created_by_alias, ' ', ' ', '0', ' ', ' ', ' ', ' ', $published, ' ', ' ', $acceslevel, ' ', ' ');
 
 		return true;
 	}

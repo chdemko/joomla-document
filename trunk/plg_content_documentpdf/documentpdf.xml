@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Id$ -->
+	<!-- $Id$ -->
 <extension version="1.6" type="plugin" group="content">
 	<name>plg_content_documentpdf</name>
 	<author>Master ICONE</author>
 	<creationDate>December 2010</creationDate>
-	<copyright>Copyright (C) 2010 - today. Master ICONE, University of La Rochelle, France</copyright>
+	<copyright>Copyright (C) 2010 - today. Master ICONE, University of La
+		Rochelle, France</copyright>
 	<license>http://www.gnu.org/licenses/gpl-2.0.html</license>
 	<authorEmail>document@chdemko.com</authorEmail>
 	<authorUrl>www.chdemko.com</authorUrl>
@@ -18,11 +19,39 @@
 	</files>
 
 	<languages>
-		<language tag="en-GB">language/en-GB/en-GB.plg_content_documentpdf.ini</language>
-		<language tag="en-GB">language/en-GB/en-GB.plg_content_documentpdf.sys.ini</language>
-		<language tag="fr-FR">language/fr-FR/fr-FR.plg_content_documentpdf.ini</language>
-		<language tag="fr-FR">language/fr-FR/fr-FR.plg_content_documentpdf.sys.ini</language>
+		<language tag="en-GB">language/en-GB/en-GB.plg_content_documentpdf.ini
+		</language>
+		<language tag="en-GB">language/en-GB/en-GB.plg_content_documentpdf.sys.ini
+		</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.plg_content_documentpdf.ini
+		</language>
+		<language tag="fr-FR">language/fr-FR/fr-FR.plg_content_documentpdf.sys.ini
+		</language>
 	</languages>
 
-	<config />
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="access" type="accesslevel"
+					description="PLG_CONTENT_DOCUMENTPDF_FIELD_ACCESSLEVEL_DESC" label="PLG_CONTENT_DOCUMENTPDF_FIELD_ACCESSLEVEL">
+					<option value="">JGLOBAL_USE_GLOBAL</option>
+				</field>
+				<field name="catid" type="category" extension="com_content"
+					description="PLG_CONTENT_DOCUMENTPDF_FIELD_CATEGORY_DESC" label="PLG_CONTENT_DOCUMENTPDF_FIELD_CATEGORY">
+					<option value="">JGLOBAL_USE_GLOBAL</option>
+				</field>
+				<field name="published" type="list"
+					description="PLG_CONTENT_DOCUMENTPDF_FIELD_PUBLISHED_DESC" label="PLG_CONTENT_DOCUMENTPDF_FIELD_PUBLISHED">
+					<option value="">JGLOBAL_USE_GLOBAL</option>
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="documentsPath" type="folderlist"
+					description="PLG_CONTENT_DOCUMENTPDF_FIELD_DOCUMENTS_PATH_DESC"
+					label="PLG_CONTENT_DOCUMENTPDF_FIELD_DOCUMENTS_PATH" directory="images">
+					<option value="">JGLOBAL_USE_GLOBAL</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
 </extension>

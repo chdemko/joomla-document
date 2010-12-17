@@ -11,6 +11,8 @@
 // No direct access
 defined('_JEXEC') or die;
 
-JLoader::register('modDocumentsLatestHelper', dirname(__FILE__) . DS . 'helper.php');
+// Include the syndicate functions only once
+require_once dirname(__FILE__).DS.'helper.php';
 
+$list = modDocumentsLatestHelper::getList($params);
 require JModuleHelper::getLayoutPath('mod_documents_latest', $params->get('layout', 'default'));

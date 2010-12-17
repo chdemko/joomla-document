@@ -7,7 +7,6 @@
  * @license		http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-//    cd /home/walien/eclipse/workspaces/workspace_u/com_document/plg_content_documentpdf
 
 // No direct access
 defined('_JEXEC') or die;
@@ -19,16 +18,29 @@ require_once 'Zend/Pdf.php';
 jimport('joomla.plugin.plugin');
 
 /**
- * PDF Document Content Plugin
+ *
+ * When a user uploads a PDF file on the JOOMLA server via the Media Manager Component,
+ * this plugin retrieves informations about the file (metadatas) and adds them to the
+ * Database in order to be indexed.
+ *
+ * @author Tony FAUCHER, Elian ORIOU, Etienne RAGONNEAU
+ *
  */
 
 class plgContentDocumentPDF extends JPlugin
 {
 
+	/**
+	 * Function called after a content deletion
+	 * @param string $context The component which launch the event 'ContentAfterDelete'
+	 * @param array $media The array that contains informations concerning the element which was deleted
+	 */
+
 	public function onContentAfterDelete($context, &$media)
 	{
 		$app = JFactory::getApplication();
 
+		/*Filtering event sources (only events launched by the media manager component or by the document component)*/
 		if($context!="com_media.file" && $context!="com_document.file"){
 			return true;
 		}
@@ -36,23 +48,33 @@ class plgContentDocumentPDF extends JPlugin
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
 
+		/*Replaces paths separators (depending of the execution environment)*/
 		$filename = str_replace('\\', '\\\\', $media->filepath);
 
+		/*The deletion query*/
 		$query = "DELETE FROM  #__document WHERE filename = '$filename'";
 
-		$db->setQuery( $query );
+		$db->setQuery($query);
 		$db->query();
 		return true;
 	}
+
+	/**
+	 * Function called after a content save
+	 * @param string $context The component which launch the event 'ContentAfterSave'
+	 * @param array $media The array that contains informations concerning the element which was saved
+	 */
 
 	public function onContentAfterSave($context, &$media)
 	{
 		$app = JFactory::getApplication();
 
+		/*Filtering event sources (only events launched by the media manager component or by the document component)*/
 		if($context!="com_media.file" && $context!="com_document.file"){
 			return true;
 		}
 
+		/*Check if the file is downloaded into the 'Documents' (placed in 'JOOMLA_PATH/images/Documents') folder*/
 		if(strpos(JPATH_BASE, '/')>=0) {
 			$path = explode("/", JPATH_BASE);
 			$path[count($path)-1] = '';
@@ -67,17 +89,18 @@ class plgContentDocumentPDF extends JPlugin
 		$url_end = 'images\/documents\/';
 		$path = $path.$url_end;
 
-		/*VERIFYING THAT THE FILE IS SAVED INTO THE 'documents' folder*/
+		/*Checks the file path structure*/
 		if(!preg_match('/^'.$path.'/', $media->filepath)) {
 			return true;
 		}
 
-		/*VERIFYING THAT THE FILE IS A PDF*/
+		/*Checks if the file is a PDF file*/
 		if($media->type != "application/pdf") {
 			JError::raiseNotice(100, "DOCUMENT PDF PLUGIN :: THIS DOCUMENT IS NOT A PDF !");
 			return true;
 		}
 
+		/*Retrieves Metadatas from the PDF file*/
 		$metas = $this->getMetadata($media->filepath);
 
 		/*The title is contained into PDF metadatas*/
@@ -106,6 +129,8 @@ class plgContentDocumentPDF extends JPlugin
 		/*The creation date is contained into PDF metadatas*/
 		$creationDate = $metas['creationDate'];
 
+
+		/*Adds informations concerning the PDF file into the database*/
 		$this->addDocument($title, $keywords, $description, $author, $alias, $filename, $mime, '0', $upload_date, $created_by,
 		$created_by_alias, ' ', ' ', '0', ' ', ' ', ' ', ' ', '1', ' ', ' ', ' ', ' ', ' ');
 
@@ -148,6 +173,7 @@ class plgContentDocumentPDF extends JPlugin
 		$db = JFactory::getDBO();
 		$query = $db->getQuery(true);
 
+		/*The Add query*/
 		$query = "INSERT INTO #__document(id, title, keywords, description, author, alias, filename, mime, catid,
 		created, created_by, created_by_alias, modified, modified_by, hits, params, language, featured, ordering,
 		published, publish_up, publish_down, access, checked_out, checked_out_time) VALUES ('', '".$title."', '".$keywords."',
@@ -166,8 +192,12 @@ class plgContentDocumentPDF extends JPlugin
 
 	public function getAlias($string)
 	{
+		/*Alias Structure : hello mr Robinson ==> HELLO_MR_ROBINSON_898 (UPPERCASE + WORD SEPARATOR + RANDOM NUMBER AT THE END)*/
+		/*To uppercase*/
 		$uppercase = strtoupper($string);
+		/*Replaces spaces by an underscore character*/
 		$no_space = str_replace(' ','_',$uppercase);
+		/*Random number*/
 		srand(time());
 		$random = (rand()%1000);
 		return $no_space."_".$random;
@@ -187,9 +217,8 @@ class plgContentDocumentPDF extends JPlugin
 		$metas = array();
 
 		/*If the pdf file is generated with the version 1.6 or higher
-		 * of pdf format, metadats are contained in the associated XMP file (XML/RDF format)*/
+		 * of pdf format, metadatas are contained in the associated XMP file (XML/RDF format)*/
 		if($metadata!="") {
-			echo "METAS : ".$metadata;
 
 			$metadataDOM = new DOMDocument();
 			$metadataDOM->loadXML($metadata);
@@ -246,6 +275,7 @@ class plgContentDocumentPDF extends JPlugin
 
 	public function parseMetadataDate($string)
 	{
+		/*The original format before parsing : 'D:20101217131030' (Pattern => D:YYYYMMDDHHmmSS)*/
 		$year = $string[2].$string[3].$string[4].$string[5];
 		$month = $string[6].$string[7];
 		$day = $string[8].$string[9];
@@ -270,13 +300,14 @@ class plgContentDocumentPDF extends JPlugin
 		}
 		// Remove all remaining other unknown characters
 		$string = preg_replace('/[^a-zA-Z0-9-]/', ' ', $string);
+		//Formatting the string to be added into the DB (because metadatas are malformed...)
 		$string = $this->removeSimpleSpace($string);
 
 		return $string;
 	}
 
 	/**
-	 * Removes simple spaces and reduces double space to simple spaces
+	 * Arranges the string to be added into the DB
 	 * @param string $string
 	 */
 
@@ -292,7 +323,6 @@ class plgContentDocumentPDF extends JPlugin
 				return implode('', $word_array);
 			}
 		}
-
 		$s = '';
 		for($i = 0 ; $i < count($array) ; $i++) {
 			$word_array = explode(' ' ,$array[$i]);
@@ -307,6 +337,12 @@ class plgContentDocumentPDF extends JPlugin
 		return $s;
 	}
 
+	/**
+	 * Function called before a content deletion
+	 * @param string $context The component which launch the event 'ContentBeforeDelete'
+	 * @param array $media The array that contains informations concerning the element which was deleted
+	 */
+
 	public function onContentBeforeDelete($context, &$media)
 	{
 		$app = JFactory::getApplication();
@@ -316,6 +352,12 @@ class plgContentDocumentPDF extends JPlugin
 		}
 		return true;
 	}
+
+	/**
+	 * Function called before a content save
+	 * @param string $context The component which launch the event 'ContentBeforeSave'
+	 * @param array $media The array that contains informations concerning the element which was saved
+	 */
 
 	public function onContentBeforeSave($context, &$media)
 	{
@@ -327,6 +369,12 @@ class plgContentDocumentPDF extends JPlugin
 		return true;
 	}
 
+	/**
+	 * Function called after a content display
+	 * @param string $context The component which launch the event 'ContentAfterDisplay'
+	 * @param array $media The array that contains informations concerning the element which was displayed
+	 */
+
 	public function onContentAfterDisplay($context, &$media)
 	{
 		$app = JFactory::getApplication();
@@ -336,6 +384,12 @@ class plgContentDocumentPDF extends JPlugin
 		}
 		return "";
 	}
+
+	/**
+	 * Function called before a content display
+	 * @param string $context The component which launch the event 'ContentBeforeDisplay'
+	 * @param array $media The array that contains informations concerning the element which was displayed
+	 */
 
 	public function onContentBeforeDisplay($context, &$media)
 	{

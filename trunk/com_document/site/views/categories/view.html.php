@@ -1,40 +1,97 @@
 <?php
-
 /**
  * @version		$Id$
- * @package		Document
- * @subpackage	Component
- * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
- * @link		http://joomlacode.org/gf/project/document/
- * @license		http://www.gnu.org/licenses/gpl-2.0.html
+ * @copyright	Copyright (C) 2005 - 2010 Open Source Matters, Inc. All rights reserved.
+ * @license		GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-// No direct access to this file
-defined('_JEXEC') or die('Restricted access');
+// No direct access
+defined('_JEXEC') or die;
 
-// import Joomla view library
 jimport('joomla.application.component.view');
 
 /**
- * Categories View of Document component
+ * Document categories view.
+ *
+ * @package		Joomla.Site
+ * @subpackage	com_Document
+ * @since 1.5
  */
 class DocumentViewCategories extends JView
 {
+	protected $state = null;
+	protected $item = null;
+	protected $items = null;
+
 	/**
-	 * Categories view display method
+	 * Display the view
+	 *
+	 * @return	mixed	False on error, null otherwise.
 	 */
-	public function display($tpl = null) 
+	function display($tpl = null)
 	{
-		$model =&$this->getModel();
- 
-  
-    $item = $model->getItem();
-	$itemparent=$model->getParent();
-    $this->assignRef( 'item', $item );
-	$this->assignRef('itemparent',$itemparent);
-		
-		// Display the template
-		
+		// Initialise variables
+		$state		= $this->get('State');
+		$items		= $this->get('Items');
+		$parent		= $this->get('Parent');
+
+		// Check for errors.
+		if (count($errors = $this->get('Errors'))) {
+			JError::raiseWarning(500, implode("\n", $errors));
+			return false;
+		}
+
+		if ($items === false)
+		{
+			JError::raiseWarning(500, JText::_('COM_DOCUMENT_ERROR_CATEGORY_NOT_FOUND'));
+			return false;
+		}
+
+		if ($parent == false)
+		{
+			JError::raiseWarning(500, JText::_('COM_DOCUMENT_ERROR_PARENT_CATEGORY_NOT_FOUND'));
+			return false;
+		}
+
+		$params = &$state->params;
+
+		$items = array($parent->id => $items);
+
+		$this->assign('maxLevelcat',	$params->get('maxLevelcat', -1));
+		$this->assignRef('params',		$params);
+		$this->assignRef('parent',		$parent);
+		$this->assignRef('items',		$items);
+
+		$this->_prepareDocument();
+
 		parent::display($tpl);
+	}
+
+	/**
+	 * Prepares the document
+	 */
+	protected function _prepareDocument()
+	{
+		$app	= JFactory::getApplication();
+		$menus	= $app->getMenu();
+		$title	= null;
+
+		// Because the application sets a default page title,
+		// we need to get it from the menu item itself
+		$menu = $menus->getActive();
+		if ($menu)
+		{
+			$this->params->def('page_heading', $this->params->get('page_title', $menu->title));
+		} else {
+			$this->params->def('page_heading', JText::_('JGLOBAL_DOCUMENTS'));
+		}
+		$title = $this->params->get('page_title', '');
+		if (empty($title)) {
+			$title = htmlspecialchars_decode($app->getCfg('sitename'));
+		}
+		elseif ($app->getCfg('sitename_pagetitles', 0)) {
+			$title = JText::sprintf('JPAGETITLE', htmlspecialchars_decode($app->getCfg('sitename')), $title);
+		}
+		$this->document->setTitle($title);
 	}
 }

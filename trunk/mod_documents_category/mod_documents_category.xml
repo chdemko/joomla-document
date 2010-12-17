@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- $Id$ -->
-<extension version="1.6" type="module" client="site">
+<extension version="1.6" type="module" client="site" method="upgrade">
 	<name>mod_documents_category</name>
 	<author>Master ICONE</author>
 	<creationDate>December 2010</creationDate>

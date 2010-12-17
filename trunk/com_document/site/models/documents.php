@@ -110,7 +110,6 @@ p	 * Method to auto-populate the model state.
 				// use created if modified is 0
 				',CASE WHEN a.modified = 0 THEN a.created ELSE a.modified END as modified ' .
 				',a.modified_by ' .
-				',uam.name as modified_by_name ' .
 				// use created if publish_up is 0
 				',a.published '.
 				',CASE WHEN a.publish_up = 0 THEN a.created ELSE a.publish_up END as publish_up ' .
@@ -119,8 +118,7 @@ p	 * Method to auto-populate the model state.
 				',a.hits '.
 				',a.featured '. 
 				',a.checked_out '. 
-				',a.checked_out_time '. 
-				',LENGTH(a.fulltext) AS readmore '
+				',a.checked_out_time ' 
 			)
 		);
 
@@ -147,8 +145,7 @@ p	 * Method to auto-populate the model state.
 
 		// Join over the users for the author and modified_by names.
 		$query->select("CASE WHEN a.created_by_alias > ' ' THEN a.created_by_alias ELSE ua.name END AS author");
-		$query->select("ua.email AS author_email");
-
+		
 		// Join over the categories to get parent category titles
 		$query->select('parent.title as parent_title, parent.id as parent_id, parent.path as parent_route, parent.alias as parent_alias');
 		$query->join('LEFT', '#__categories as parent ON parent.id = c.parent_id');
@@ -213,20 +210,6 @@ p	 * Method to auto-populate the model state.
 				// Normally we do not discriminate
 				// between featured/unfeatured items.
 				break;
-		}
-
-		// Filter by a single or group of articles.
-		$articleId = $this->getState('filter.article_id');
-
-		if (is_numeric($articleId)) {
-			$type = $this->getState('filter.article_id.include', true) ? '= ' : '<> ';
-			$query->where('a.id '.$type.(int) $articleId);
-		}
-		else if (is_array($articleId)) {
-			JArrayHelper::toInteger($articleId);
-			$articleId = implode(',', $articleId);
-			$type = $this->getState('filter.article_id.include', true) ? 'IN' : 'NOT IN';
-			$query->where('a.id '.$type.' ('.$articleId.')');
 		}
 
 		// Filter by a single or group of categories

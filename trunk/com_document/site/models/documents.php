@@ -141,11 +141,6 @@ p	 * Method to auto-populate the model state.
 
 		$query->from('#__document AS a');
 
-		// Join over the frontpage articles.
-		if ($this->context != 'com_document.featured') {
-			$query->join('LEFT', '#__document_frontpage AS fp ON fp.document_id = a.id');
-		}
-
 		// Join over the categories.
 		$query->select('c.title AS category_title, c.path AS category_route, c.access AS category_access, c.alias AS category_alias');
 		$query->join('LEFT', '#__categories AS c ON c.id = a.catid');
@@ -153,9 +148,6 @@ p	 * Method to auto-populate the model state.
 		// Join over the users for the author and modified_by names.
 		$query->select("CASE WHEN a.created_by_alias > ' ' THEN a.created_by_alias ELSE ua.name END AS author");
 		$query->select("ua.email AS author_email");
-
-		$query->join('LEFT', '#__users AS ua ON ua.id = a.created_by');
-		$query->join('LEFT', '#__users AS uam ON uam.id = a.modified_by');
 
 		// Join over the categories to get parent category titles
 		$query->select('parent.title as parent_title, parent.id as parent_id, parent.path as parent_route, parent.alias as parent_alias');

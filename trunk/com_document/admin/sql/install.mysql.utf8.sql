@@ -32,8 +32,16 @@ CREATE TABLE IF NOT EXISTS `#__document` (
      PRIMARY KEY  (`id`),
      Key `idx_catid` (`catid`),
 	 Key `idx_created_by` (`created_by`),
-     Key `idx_modified_by` (`modified_by`)	
-     
+     Key `idx_modified_by` (`modified_by`),
+     Key `idx_created` (`created`),
+	 Key `idx_modified` (`modified`),
+     Key `idx_hits` (`hits`),
+     Key `idx_language` (`language`),
+     Key `idx_featured` (`featured`),
+     Key `idx_ordering` (`ordering`),
+     Key `idx_published` (`published`),
+     Key `idx_access` (`access`)
+    
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 

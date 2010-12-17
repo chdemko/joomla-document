@@ -11,9 +11,7 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
-
-
-
+?>
 
 	<form method="POST" action="index.php?option=com_document&task=document.upload" enctype="multipart/form-data">
 	     <input type="hidden" name="MAX_FILE_SIZE" value="31457280">

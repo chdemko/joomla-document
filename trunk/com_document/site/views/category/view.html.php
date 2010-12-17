@@ -36,7 +36,7 @@ class DocumentViewCategory extends JView
 		    echo '<ul>';
 		    while ($donnees = $req->fetch())
 		    {
-			echo '<li>' . $donnees['nom'] . ' (' . $donnees['prix'] . ' EUR)</li>';
+			    echo '<li>' . $donnees['nom'] . ' (' . $donnees['prix'] . ' EUR)</li>';
 		    }
 		    echo '</ul>';
 		    

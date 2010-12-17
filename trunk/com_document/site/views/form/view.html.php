@@ -26,8 +26,10 @@ class DocumentViewForm extends JView
 	public function display($tpl = null) 
 	{
 	
-		$model = $this->getModels();
-		
+		if (!JFactory::getUser()->authorize('core.create','com_document')) {
+			JRaiseError(403, 'comment');
+			return false;
+		}
 
 	
 	

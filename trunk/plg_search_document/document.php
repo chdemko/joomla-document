@@ -132,14 +132,14 @@ class plgSearchDocument extends JPlugin
 	 		break;
 	 }
 
-		$query = 'SELECT nt.title AS title, nt.description AS text, nt.created AS created, nt.mime AS section'
+		$query = 'SELECT nt.id AS id, nt.title AS title, nt.description AS text, nt.created AS created, nt.mime AS section'
 		. ' FROM ('
-		. ' SELECT DISTINCT d.title, d.description, d.created, d.mime'
+		. ' SELECT DISTINCT d.id, d.title, d.description, d.created, d.mime'
 		. ' FROM #__document d'
 		. ' WHERE ( '. $where .' )'
 		. ' AND d.published = 1'
 		. ' UNION '
-		.'SELECT DISTINCT d.title, d.description, d.created, d.mime'
+		.'SELECT DISTINCT d.id, d.title, d.description, d.created, d.mime'
 		. ' FROM #__document d, #__document_fields df'
 		. ' WHERE ( '.$where_extra.' )'
 		. ' AND d.id = df.id'

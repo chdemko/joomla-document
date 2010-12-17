@@ -154,7 +154,7 @@ class plgSearchDocument extends JPlugin
 		if (is_array($rows))
 		{
 			foreach($rows as $key => $row) {
-				$rows[$key]->href = 'index.php?option=com_document&view=document&id='.$row->catslug.'&id='.$row->slug;
+				$rows[$key]->href = 'index.php?option=com_document&view=document&id='.$rows[$key]->id;
 				$rows[$key]->browsernav= '1 ';
 			}
 		}

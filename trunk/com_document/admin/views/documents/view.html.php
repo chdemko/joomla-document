@@ -30,7 +30,7 @@ class DocumentViewDocuments extends JView
 	function display($tpl = null) 
 	{
 		$this->state= $this->get('State');
-		$this->items		= $this->get('Items');
+		$this->items		= $this->get('Item');
 		$this->pagination	= $this->get('Pagination');
 		// Set the toolbar
 		$this->addToolbar();

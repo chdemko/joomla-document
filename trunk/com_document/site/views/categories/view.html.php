@@ -25,7 +25,16 @@ class DocumentViewCategories extends JView
 	 */
 	public function display($tpl = null) 
 	{
+		$model =&$this->getModel();
+ 
+  
+    $item = $model->getItem();
+	$itemparent=$model->getParent();
+    $this->assignRef( 'item', $item );
+	$this->assignRef('itemparent',$itemparent);
+		
 		// Display the template
+		
 		parent::display($tpl);
 	}
 }

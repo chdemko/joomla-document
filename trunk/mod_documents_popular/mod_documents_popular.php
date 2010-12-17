@@ -11,6 +11,8 @@
 // No direct access
 defined('_JEXEC') or die;
 
-JLoader::register('modDocumentsPopularHelper', dirname(__FILE__) . DS . 'helper.php');
+// Include the syndicate functions only once
+require_once dirname(__FILE__).'/helper.php';
 
+$list = modDocumentsPopularHelper::getList($params);
 require JModuleHelper::getLayoutPath('mod_documents_popular', $params->get('layout', 'default'));

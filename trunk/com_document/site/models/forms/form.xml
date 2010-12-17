@@ -1,5 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- $Id$ -->
 <form>
+	<fieldset>
+		<field
+			id="id"
+			name="id"
+			type="hidden"
+			class="inputbox"
+			label="COM_DOCUMENT_ID_LABEL"
+			size="10"
+			default="0"			
+			readonly="true" />
+		<field 
+			name="asset_id" 
+			type="hidden" 
+			filter="unset" />
+
+		<field 
+			name="author" 
+			type="text"
+			label="JAUTHOR" 
+			description="JFIELD_METADATA_AUTHOR_DESC"
+			size="20" />
+
+		<field
+			name="ordering"
+			type="text" 
+			label="JFIELD_ORDERING_LABEL"
+			description="JFIELD_ORDERING_DESC" 
+			class="inputbox" 
+			size="6"
+			default="0" />
+
+		<field
+			id="keywords"
+			name="keywords"
+			type="text"
+			class="inputbox"
+			label="JGLOBAL_KEYWORDSLABEL"
+			size="10"
+			default="0"			
+			readonly="true" />
+
+
+		<field
+			id="title"
+			name="title"
+			type="text"
+			label="JGLOBAL_TITLE"
+			description="JFIELD_TITLE_DESC"
+			class="inputbox"
+			size="30"
+			required="true" />
+
+		<field 
+			name="modified" 
+			type="calendar" 
+			class="readonly"
+			label="COM_CONTENT_FIELD_MODIFIED_LABEL" 
+			description="COM_CONTENT_FIELD_MODIFIED_DESC"
+			size="22" 
+			readonly="true" 
+			format="%Y-%m-%d %H:%M:%S" 
+			filter="user_utc" />
+
+		<field 
+			name="modified_by" 
+			type="user"
+			label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"
+			class="readonly"
+			readonly="true"
+			filter="unset" />
+
+		<field
+			id="alias"
+			name="alias"
+			type="text"
+			label="JFIELD_ALIAS_LABEL"
+			description="JFIELD_ALIAS_DESC"
+			class="inputbox"
+			size="45"
+			filter="unset" />
+
+		<field 
+			name="checked_out" 
+			type="hidden" 
+			filter="unset" />
+
+		<field 
+			name="checked_out_time" 
+			type="hidden" 
+			filter="unset" />
+
+	
+		<field 
+			id="featured"
+			name="featured" 
+			type="list"
+			label="JGLOBAL_FIELD_FEATURED_LABEL"
+			description="JGLOBAL_FIELD_FEATURED_DESC"
+			class="inputbox"
+			default="0"
+		>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		
+		<field
+			id="catid"
+			name="catid"
+			type="category"
+			extension="com_content"
+			label="JCATEGORY"
+			description="JFIELD_CATEGORY_DESC"
+			class="inputbox"
+			required="true">
+		</field>
+
+		<field
+			id="created"
+			name="created"
+			type="calendar"
+			filter="unset" />
+		<field
+			id="created_by"
+			name="created_by"
+			type="text"
+			filter="unset" />
+
+		<field
+			id="created_by_alias"
+			name="created_by_alias"
+			type="text"
+			label="JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL"
+			description="JGLOBAL_FIELD_CREATED_BY_ALIAS_DESC"
+			class="inputbox"
+			size="20" />
+
+		<field
+			id="publish_up"
+			name="publish_up"
+			type="calendar"
+			label="JGLOBAL_FIELD_PUBLISH_UP_LABEL"
+			description="JGLOBAL_FIELD_PUBLISH_UP_DESC"
+			class="inputbox"
+			format="%Y-%m-%d %H:%M:%S"
+			size="22"
+			filter="user_utc" />
+
+		<field
+			id="publish_down"
+			name="publish_down"
+			type="calendar"
+			label="JGLOBAL_FIELD_PUBLISH_DOWN_LABEL"
+			description="JGLOBAL_FIELD_PUBLISH_DOWN_DESC"
+			class="inputbox"
+			format="%Y-%m-%d %H:%M:%S"
+			size="22"
+			filter="user_utc" />
+
+
+		<field
+			name="language"
+			type="contentlanguage"
+			label="JFIELD_LANGUAGE_LABEL"
+			description="JFIELD_LANGUAGE_DESC"
+			class="inputbox">
+			<option value="*">JALL</option>
+		</field>
+
+		<field
+			id="access"
+			name="access"
+			type="accesslevel"
+			label="JFIELD_ACCESS_LABEL"
+			description="JFIELD_ACCESS_DESC"
+			class="inputbox"
+			size="1" />
+
+		
+
+	</fieldset>
 </form>
 

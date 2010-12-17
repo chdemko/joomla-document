@@ -51,4 +51,11 @@ class DocumentModelForm extends JModelForm
 		}
 		return $form;
 	}
+
+		protected function loadFormData()
+	{
+		return array();
+	}
+
+
 }

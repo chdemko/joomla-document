@@ -20,7 +20,7 @@ defined('_JEXEC') or die;
 
 <div><strong>Author:</strong></div>
     <p>
-        <?php echo $this->item->category?> 
+        <?php echo $this->item->author ?> 
     </p>
     <div><strong>categorie:</strong></div>
     <p>

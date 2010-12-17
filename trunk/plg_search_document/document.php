@@ -7,7 +7,6 @@
  * @license		http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-//     cd /home/walien/eclipse/workspaces/workspace_u/com_document/plg_search_document
 
 // No direct access
 defined('_JEXEC') or die;
@@ -15,11 +14,18 @@ defined('_JEXEC') or die;
 jimport('joomla.plugin.plugin');
 
 /**
- * Document Search Plugin
+ *
+ * This plugins provides results when a user searchs documents elements
+ *
+ * @author Tony FAUCHER, Elian ORIOU, Etienne RAGONNEAU
  */
+
+
 class plgSearchDocument extends JPlugin
 {
 	/**
+	 * Adds area concerning document elements
+	 *
 	 * @return array An array of search areas
 	 */
 	function onContentSearchAreas()
@@ -54,9 +60,10 @@ class plgSearchDocument extends JPlugin
 			return array();
 		}
 
+		/*WHERE clauses generation depending on the search mode*/
 		$wheres = array();
 		switch ($phrase) {
-			//search exact
+			/*search exact (every words into the correct order will match a document field)*/
 	 	case 'exact':
 	 		$text        = $db->Quote( '%'.$db->getEscaped( $text, true ).'%', false );
 	 		$wheres2     = array();
@@ -66,7 +73,7 @@ class plgSearchDocument extends JPlugin
 	 		$where_extra= 'LOWER(df.field_value) LIKE '.$text.' ';
 
 	 		break;
-	 		//search all
+	 		/*search all (All words must match a document field)*/
 	 	case 'all':
 	 		$words         = explode( ' ', $text );
 	 		$wheres = array();
@@ -86,9 +93,8 @@ class plgSearchDocument extends JPlugin
 	 		$where = '(' . implode( ($phrase == 'all' ? ') AND (' : ') OR ('), $wheres ) . ')';
 	 		$where_extra =  '(' . implode( ($phrase == 'all' ? ') AND (' : ') OR ('), $wheres_field ) . ')';
 	 		break;
-	 		//search any
+	 		/*search any (One word at least must match a document field)*/
 	 	case 'any':
-	 		//set default
 	 	default:
 	 		$words         = explode( ' ', $text );
 	 		$wheres = array();
@@ -132,6 +138,7 @@ class plgSearchDocument extends JPlugin
 	 		break;
 	 }
 
+	 /*The generated query will retrieves all document into the jos_document table and into jos_document_fields (thanks to the UNION clause)*/
 		$query = 'SELECT nt.id AS id, nt.title AS title, nt.description AS text, nt.created AS created, nt.mime AS section'
 		. ' FROM ('
 		. ' SELECT DISTINCT d.id, d.title, d.description, d.created, d.mime'
@@ -151,6 +158,7 @@ class plgSearchDocument extends JPlugin
 		$db->setQuery($query);
 		$rows = $db->loadObjectList();
 
+		/*Sets results displayed informations*/
 		if (is_array($rows))
 		{
 			foreach($rows as $key => $row) {

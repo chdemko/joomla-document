@@ -11,6 +11,8 @@
 // No direct access
 defined('_JEXEC') or die;
 
-JLoader::register('modDocumentsNewsHelper', dirname(__FILE__) . DS . 'helper.php');
+// Include the syndicate functions only once
+require_once dirname(__FILE__).'/helper.php';
 
-require JModuleHelper::getLayoutPath('mod_documents_news', $params->get('layout', 'default'));
+$list = modDocumentsNewsHelper::getList($params);
+require JModuleHelper::getLayoutPath('mod_documents_news', $params->get('layout', 'horizontal'));

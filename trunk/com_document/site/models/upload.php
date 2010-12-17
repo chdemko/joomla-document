@@ -29,6 +29,33 @@ class DocumentModelUpload extends JModelForm
 	 * @return	JTable	A database object
 	 * @since	1.6
 	 */
+
+	protected function populateState()
+	{
+		$file	= JRequest::getVar('Filedata', '', 'files', 'array');
+		$this->setState('document.filedata', $file);
+	}
+ 
+	public function upload()
+	{
+		$file	= $this->getState('document.filedata');
+
+		if ( ! JFile::upload( $file, getVar('JPATH_ROOT').'/image/pdf' ))
+		{
+			// Error in upload
+			JError::raiseWarning(100, JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE'));
+			return false;
+		}
+		else
+		{
+			// Trigger the onContentAfterSave event.
+			// $dispatcher->trigger('onDocumentAfterSave', array('com_media.file', &$object_file));
+			// $this->setMessage(JText::sprintf('COM_MEDIA_UPLOAD_COMPLETE', substr($file['filepath'], strlen(COM_MEDIA_BASE))));
+			return true;
+		}
+	}
+	
+	
 	public function getTable($type = 'Document', $prefix = 'DocumentTable', $config = array()) 
 	{
 		return JTable::getInstance($type, $prefix, $config);

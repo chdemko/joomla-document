@@ -9,7 +9,24 @@
  * @license		http://www.gnu.org/licenses/gpl-2.0.html
  */
 
-// No direct access to this file
-defined('_JEXEC') or die('Restricted access');
+jimport('joomla.application.categories');
+
+/**
+ * Content Component Category Tree
+ *
+ * @static
+ * @package		Joomla
+ * @subpackage	com_content
+ * @since 1.6
+ */
+class DocumentCategories extends JCategories
+{
+	public function __construct($options = array())
+	{
+		$options['table'] = '#__document';
+		$options['extension'] = 'com_document';
+		parent::__construct($options);
+	}
+}
 
 

@@ -53,6 +53,25 @@ class plgContentDocumentPDF extends JPlugin
 			return true;
 		}
 
+		if(strpos(JPATH_BASE, '/')>=0) {
+			$path = explode("/", JPATH_BASE);
+			$path[count($path)-1] = '';
+			$path = implode('\/', $path);
+		}
+		else if(strpos(JPATH_BASE, '\\')>=0) {
+			$path = explode("\\", JPATH_BASE);
+			$path[count($path)-1] = '';
+			$path = implode('\\', $path);
+		}
+
+		$url_end = 'images\/documents\/';
+		$path = $path.$url_end;
+
+		/*VERIFYING THAT THE FILE IS SAVED INTO THE 'documents' folder*/
+		if(!preg_match('/^'.$path.'/', $media->filepath)) {
+			return true;
+		}
+
 		/*VERIFYING THAT THE FILE IS A PDF*/
 		if($media->type != "application/pdf") {
 			JError::raiseNotice(100, "DOCUMENT PDF PLUGIN :: THIS DOCUMENT IS NOT A PDF !");

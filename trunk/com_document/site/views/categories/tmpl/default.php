@@ -37,5 +37,4 @@ $pageClass = $this->params->get('pageclass_sfx');
 <?php
 echo $this->loadTemplate('items');
 ?>
-
 </div>

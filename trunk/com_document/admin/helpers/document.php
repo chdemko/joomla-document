@@ -48,6 +48,11 @@ class documentHelper
 			'index.php?option=com_document&view=featured',
 			$vName == 'featured'
 		);
+		JSubMenuHelper::addEntry(
+			JText::_('COM_DOCUMENT_UPLOAD'),
+			'index.php?option=com_document&view=upload&layout=edit',
+			$vName == 'featured'
+		);
 	}
 
 	/**

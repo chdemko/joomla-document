@@ -31,5 +31,28 @@ class DocumentControllerDocuments extends JControllerAdmin
 	}
 	
 	
+	protected function add($data = array())
+	{
+		// Initialise variables.
+		$user		= JFactory::getUser();
+		$categoryId	= JArrayHelper::getValue($data, 'catid', JRequest::getInt('filter_category_id'), 'int');
+		$allow		= null;
+
+		if ($categoryId) {
+			// If the category has been passed in the data or URL check it.
+			$allow	= $user->authorise('core.create', 'com_document.category.'.$categoryId);
+		}
+
+		if ($allow === null) {
+			// In the absense of better information, revert to the component permissions.
+			$msg = "Vous n'avez pas le droit de créer un document.";
+			return $msg;
+		}
+		else {
+			$this->setRedirect('index.php?option=com_document&view=upload&layout=edit');
+			return $allow;
+		}
+	}
+	
 }
 

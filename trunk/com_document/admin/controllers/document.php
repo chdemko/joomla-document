@@ -28,26 +28,7 @@ class DocumentControllerDocument extends JControllerForm
 	 * @return	boolean
 	 * @since	1.6
 	 */
-	protected function allowAdd($data = array())
-	{
-		// Initialise variables.
-		$user		= JFactory::getUser();
-		$categoryId	= JArrayHelper::getValue($data, 'catid', JRequest::getInt('filter_category_id'), 'int');
-		$allow		= null;
-
-		if ($categoryId) {
-			// If the category has been passed in the data or URL check it.
-			$allow	= $user->authorise('core.create', 'com_document.category.'.$categoryId);
-		}
-
-		if ($allow === null) {
-			// In the absense of better information, revert to the component permissions.
-			return parent::allowAdd();
-		}
-		else {
-			return $allow;
-		}
-	}
+	
 
 	/**
 	 * Method override to check if you can edit an existing record.
@@ -58,7 +39,7 @@ class DocumentControllerDocument extends JControllerForm
 	 * @return	boolean
 	 * @since	1.6
 	 */
-	protected function allowEdit($data = array(), $key = 'id')
+	protected function edit($data = array(), $key = 'id')
 	{
 		// Initialise variables.
 		$recordId	= (int) isset($data[$key]) ? $data[$key] : 0;
@@ -98,17 +79,16 @@ class DocumentControllerDocument extends JControllerForm
 	
 	
 	
-	protected function upload()
+	public function upload()
 	{
+	
 		JRequest::checkToken('request') or jexit(JText::_('JINVALID_TOKEN'));
 
 		// Get the user
 		$user		= JFactory::getUser();
 
-		var_dump("upload");
-		exit();
+		
 
-/*
 		// Get some data from the request
 		// FileName, FileSize
 		$file		= JRequest::getVar('filedata', '', 'files', 'array');
@@ -161,7 +141,7 @@ class DocumentControllerDocument extends JControllerForm
 				return false;
 			}
 
-*/
+
 			if (!$user->authorise('core.create', 'com_document'))
 			{
 				// File does not exist and user is not authorised to create
@@ -173,7 +153,7 @@ class DocumentControllerDocument extends JControllerForm
 				
 			}
 
-/*
+
 			if (!JFile::upload($file['tmp_name'], $file['filepath']))
 			{
 				// Error in upload
@@ -194,7 +174,7 @@ class DocumentControllerDocument extends JControllerForm
 			$this->setRedirect('index.php', JText::_('COM_DOCUMENT_INVALID_REQUEST'), 'error');
 			return false;
 		}
-*/
+
 	}
 	
 	

@@ -108,19 +108,19 @@ p	 * Method to auto-populate the model state.
 				',a.featured '.
 				',a.ordering '.
 				// use created if modified is 0
-				'CASE WHEN a.modified = 0 THEN a.created ELSE a.modified END as modified, ' .
-				'a.modified_by, ' .
-				'uam.name as modified_by_name,' .
+				',CASE WHEN a.modified = 0 THEN a.created ELSE a.modified END as modified ' .
+				',a.modified_by ' .
+				',uam.name as modified_by_name ' .
 				// use created if publish_up is 0
-				'a.published, '.
-				'CASE WHEN a.publish_up = 0 THEN a.created ELSE a.publish_up END as publish_up, ' .
-				'a.publish_down, '.
-				'a.access, '.
-				'a.hits, '.
-				'a.featured,'. 
-				'a.checked_out,'. 
-				'a.checked_out_time,'. 
-				' LENGTH(a.fulltext) AS readmore '
+				',a.published '.
+				',CASE WHEN a.publish_up = 0 THEN a.created ELSE a.publish_up END as publish_up ' .
+				',a.publish_down '.
+				',a.access '.
+				',a.hits '.
+				',a.featured '. 
+				',a.checked_out '. 
+				',a.checked_out_time '. 
+				',LENGTH(a.fulltext) AS readmore '
 			)
 		);
 

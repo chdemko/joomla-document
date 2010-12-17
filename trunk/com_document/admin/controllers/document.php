@@ -81,8 +81,8 @@ class DocumentControllerDocument extends JControllerForm
 	
 	public function upload()
 	{
-	
-		JRequest::checkToken('request') or jexit(JText::_('JINVALID_TOKEN'));
+	var_dump(COM_DOCUMENT_BASE);exit();
+		//JRequest::checkToken('request') or jexit(JText::_('JINVALID_TOKEN'));
 
 		// Get the user
 		$user		= JFactory::getUser();
@@ -277,5 +277,43 @@ class DocumentControllerDocument extends JControllerForm
 			}
 			return $ret;
 		}
+	}
+	
+	function featured()
+	{
+		// Check for request forgeries
+		JRequest::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
+		// Initialise variables.
+		$user	= JFactory::getUser();
+		$ids	= JRequest::getVar('cid', array(), '', 'array');
+		$values	= array('featured' => 1, 'unfeatured' => 0);
+		$task	= $this->getTask();
+		$value	= JArrayHelper::getValue($values, $task, 0, 'int');
+
+		// Access checks.
+		foreach ($ids as $i => $id)
+		{
+			if (!$user->authorise('core.edit.state', 'com_document.document.'.(int) $id)) {
+				// Prune items that you can't change.
+				unset($ids[$i]);
+				JError::raiseNotice(403, JText::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'));
+			}
+		}
+
+		if (empty($ids)) {
+			JError::raiseWarning(500, JText::_('JERROR_NO_ITEMS_SELECTED'));
+		}
+		else {
+			// Get the model.
+			$model = $this->getModel();
+
+			// Publish the items.
+			if (!$model->featured($ids, $value)) {
+				JError::raiseWarning(500, $model->getError());
+			}
+		}
+
+		$this->setRedirect('index.php?option=com_document&view=documents');
 	}
 }

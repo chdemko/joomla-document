@@ -29,7 +29,11 @@ CREATE TABLE IF NOT EXISTS `#__document` (
   `access` int NOT NULL default'0' COMMENT 'Describe the minimum level of privileges for access to the document',
   `checked_out` int NOT NULL default'0' COMMENT 'Representing the user who is currently editing the document',
   `checked_out_time` date default '0000-00-00 00:00:00' COMMENT 'Date representing the start time of plublishing',
-     PRIMARY KEY  (`id`)
+     PRIMARY KEY  (`id`),
+     Key `idx_catid` (`catid`),
+	 Key `idx_created_by` (`created_by`),
+     Key `idx_modified_by` (`modified_by`)	
+     
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 

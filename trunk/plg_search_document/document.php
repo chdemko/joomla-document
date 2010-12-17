@@ -150,6 +150,7 @@ class plgSearchDocument extends JPlugin
 		. ' FROM #__document d, #__document_fields df'
 		. ' WHERE ( '.$where_extra.' )'
 		. ' AND d.id = df.id'
+		. ' AND d.published = 1'
 		. ') AS nt'
 		. ' ORDER BY '.$order
 		;

@@ -25,6 +25,41 @@ class DocumentViewCategory extends JView
 	 */
 	public function display($tpl = null) 
 	{
+		try
+		{
+		    $pdo_options[PDO::ATTR_ERRMODE] = PDO::ERRMODE_EXCEPTION;
+		    $bdd = new PDO('mysql:host=localhost;dbname=SQL#__document', 'root', '', $pdo_options);
+		    
+		    $req = $bdd->prepare('SELECT ..... id and nom....');
+		    $req->execute(array('id' => $_GET['id article ?'], 'nom' => $_GET['nom article ?']));
+		    
+		    echo '<ul>';
+		    while ($donnees = $req->fetch())
+		    {
+			echo '<li>' . $donnees['nom'] . ' (' . $donnees['prix'] . ' EUR)</li>';
+		    }
+		    echo '</ul>';
+		    
+		    $reponse->closeCursor();
+		}
+		catch(Exception $e)
+		{
+		    die('Erreur : '.$e->getMessage());
+		}
+		
+		<form action="view.html.php" method="post">
+			<p>
+			    <input type="text" name="prenom" />
+			    <input type="submit" value="Valider" />
+			</p>
+		</form>
+
+		
+
+		$this->msg = $rqt;
+		
+		
+		
 		// Display the template
 		parent::display($tpl);
 	}

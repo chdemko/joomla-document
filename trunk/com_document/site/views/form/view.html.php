@@ -25,6 +25,12 @@ class DocumentViewForm extends JView
 	 */
 	public function display($tpl = null) 
 	{
+	
+		$model = $this->getModels();
+		
+
+	
+	
 		// Display the template
 		parent::display($tpl);
 	}

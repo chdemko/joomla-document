@@ -24,7 +24,13 @@ class DocumentViewUpload extends JView
 	 * Upload view display method
 	 */
 	public function display($tpl = null) 
-	{
+	{	
+		if (!JFactory::getUser()->authorize('core.create','com_document')) {
+			JRaiseError(403, 'comment');
+			return false;
+		}
+		
+
 		// Display the template
 		parent::display($tpl);
 	}

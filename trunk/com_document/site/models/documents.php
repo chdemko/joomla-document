@@ -127,14 +127,14 @@ p	 * Method to auto-populate the model state.
 		{
 			// If badcats is not null, this means that the article is inside an unpublished category
 			// In this case, the state is set to 0 to indicate Unpublished (even if the article state is Published)
-			$query->select($this->getState('list.select','CASE WHEN badcats.id is null THEN a.state ELSE 2 END AS state'));
+			$query->select($this->getState('list.select','CASE WHEN badcats.id is null THEN a.published ELSE 2 END AS state'));
 		}
 		else 
 		{
 			// Process non-archived layout
 			// If badcats is not null, this means that the article is inside an unpublished category
 			// In this case, the state is set to 0 to indicate Unpublished (even if the article state is Published)
-			$query->select($this->getState('list.select','CASE WHEN badcats.id is not null THEN 0 ELSE a.state END AS state'));
+			$query->select($this->getState('list.select','CASE WHEN badcats.id is not null THEN 0 ELSE a.published END AS state'));
 		}
 
 		$query->from('#__document AS a');
@@ -144,7 +144,7 @@ p	 * Method to auto-populate the model state.
 		$query->join('LEFT', '#__categories AS c ON c.id = a.catid');
 
 		// Join over the users for the author and modified_by names.
-		$query->select("CASE WHEN a.created_by_alias > ' ' THEN a.created_by_alias ELSE ua.name END AS author");
+		$query->select("CASE WHEN a.created_by_alias > ' ' THEN a.created_by_alias END AS author");
 		
 		// Join over the categories to get parent category titles
 		$query->select('parent.title as parent_title, parent.id as parent_id, parent.path as parent_route, parent.alias as parent_alias');
@@ -161,14 +161,14 @@ p	 * Method to auto-populate the model state.
 			// If any up-path categories are archived, include all children in archived layout
 			$subquery .= ' AND parent.published = 2 GROUP BY cat.id ';
 			// Set effective state to archived if up-path category is archived
-			$publishedWhere = 'CASE WHEN badcats.id is null THEN a.state ELSE 2 END';
+			$publishedWhere = 'CASE WHEN badcats.id is null THEN a.published ELSE 2 END';
 		}
 		else {
 			// Find any up-path categories that are not published
 			// If all categories are published, badcats.id will be null, and we just use the article state
 			$subquery .= ' AND parent.published != 1 GROUP BY cat.id ';
 			// Select state to unpublished if up-path category is unpublished
-			$publishedWhere = 'CASE WHEN badcats.id is null THEN a.state ELSE 0 END';
+			$publishedWhere = 'CASE WHEN badcats.id is null THEN a.published ELSE 0 END';
 		}
 		$query->join('LEFT OUTER', '(' . $subquery . ') AS badcats ON badcats.id = c.id');
 
@@ -351,7 +351,7 @@ p	 * Method to auto-populate the model state.
 				case 'author':
 					$query->where(
 						'LOWER( CASE WHEN a.created_by_alias > '.$db->quote(' ').
-						' THEN a.created_by_alias ELSE ua.name END ) LIKE '.$filter.' '
+						' THEN a.created_by_alias END ) LIKE '.$filter.' '
 					);
 					break;
 
@@ -374,7 +374,7 @@ p	 * Method to auto-populate the model state.
 		// Add the list ordering clause.
 		$query->order($this->getState('list.ordering', 'a.ordering').' '.$this->getState('list.direction', 'ASC'));
 
-		echo nl2br(str_replace('#__','jos_',$query));
+		//echo nl2br(str_replace('#__','jos_',$query));
 
 		return $query;
 	}

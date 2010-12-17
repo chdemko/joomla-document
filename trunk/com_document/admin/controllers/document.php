@@ -98,16 +98,20 @@ class DocumentControllerDocument extends JControllerForm
 	
 	
 	
-	protected function allowUpload()
+	protected function upload()
 	{
 		JRequest::checkToken('request') or jexit(JText::_('JINVALID_TOKEN'));
 
 		// Get the user
 		$user		= JFactory::getUser();
 
+		var_dump("upload");
+		exit();
+
+/*
 		// Get some data from the request
 		// FileName, FileSize
-		$file		= JRequest::getVar('Filedata', '', 'files', 'array');
+		$file		= JRequest::getVar('filedata', '', 'files', 'array');
 		// Folder on the server
 		$folder		= JRequest::getVar('folder', '', '', 'path');
 		$return		= JRequest::getVar('return-url', null, 'post', 'base64');
@@ -156,13 +160,20 @@ class DocumentControllerDocument extends JControllerForm
 				JError::raiseWarning(100, JText::_('COM_DOCUMENT_ERROR_FILE_EXISTS'));
 				return false;
 			}
-			elseif (!$user->authorise('core.create', 'com_document'))
+
+*/
+			if (!$user->authorise('core.create', 'com_document'))
 			{
 				// File does not exist and user is not authorised to create
 				JError::raiseWarning(403, JText::_('COM_DOCUMENT_ERROR_CREATE_NOT_PERMITTED'));
 				return false;
 			}
+			else
+			{
+				
+			}
 
+/*
 			if (!JFile::upload($file['tmp_name'], $file['filepath']))
 			{
 				// Error in upload
@@ -177,11 +188,13 @@ class DocumentControllerDocument extends JControllerForm
 				return true;
 			}
 		}
+
 		else
 		{
 			$this->setRedirect('index.php', JText::_('COM_DOCUMENT_INVALID_REQUEST'), 'error');
 			return false;
 		}
+*/
 	}
 	
 	

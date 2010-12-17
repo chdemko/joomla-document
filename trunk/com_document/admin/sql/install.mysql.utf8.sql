@@ -30,6 +30,6 @@ CREATE TABLE IF NOT EXISTS `#__document` (
   `checked_out` int NOT NULL default'0' COMMENT 'Representing the user who is currently editing the document',
   `checked_out_time` date default '0000-00-00 00:00:00' COMMENT 'Date representing the start time of plublishing',
      PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 

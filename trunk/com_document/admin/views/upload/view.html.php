@@ -73,5 +73,8 @@ class DocumentViewUpload extends JView
 		// Document
 		$document = JFactory::getDocument();
 		$document->setTitle(JText::_('COM_DOCUMENT_UPLOAD_TITLE'));
+
+		//var_dump($document);
+		//exit();
 	}
 }

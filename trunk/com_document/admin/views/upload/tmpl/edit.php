@@ -12,7 +12,7 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 ?>
-<form enctype="multipart/form-data" action="<?php echo JRoute::_('index.php?option=com_document&view=upload'); ?>" method="post" name="adminForm" id="adminForm">
+<form enctype="multipart/form-data" action="<?php echo JRoute::_('index.php?option=com_document&task=document.upload'); ?>" method="post" name="adminForm" id="adminForm">
 	<div class="width-70 fltlft">
 		<fieldset id="uploadform">
 		<legend><?php echo JText::_('COM_DOCUMENT_UPLOAD'); ?></legend>

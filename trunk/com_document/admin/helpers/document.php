@@ -35,7 +35,7 @@ class documentHelper
 	public static function addSubmenu($vName)
 	{
 		JSubMenuHelper::addEntry(
-			JText::_('JGLOBAL_ARTICLES'),
+			JText::_('JGLOBAL_DOCUMENTS'),
 			'index.php?option=com_document&view=documents',
 			$vName == 'documents'
 		);

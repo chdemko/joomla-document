@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version		$Id$
+ * @version		$Id: helpers.php 50 2010-12-14 12:42:00Z raggad $
  * @package		Document
  * @subpackage	Component
  * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version		$Id$
+ * @version		$Id: helper.php 132 2010-12-17 09:41:02Z aguibe01 $
  * @package		Documents
  * @subpackage	Modules
  * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.

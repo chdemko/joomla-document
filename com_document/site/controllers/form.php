@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version		$Id$
+ * @version		$Id: form.php 67 2010-12-14 14:16:21Z eexit $
  * @package		Document
  * @subpackage	Component
  * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.

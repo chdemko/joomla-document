@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version		$Id$
+ * @version		$Id: default.php 97 2010-12-15 12:09:35Z tbonnaud $
  * @package		Document
  * @subpackage	Component
  * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
@@ -12,7 +12,6 @@
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
 
-
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
 
@@ -20,10 +19,11 @@ $user		= JFactory::getUser();
 $userId		= $user->get('id');
 $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
-$saveOrder	= $listOrder == 'a.ordering';
+$saveOrder	= $listOrder == 'ordering';
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_document&view=documents');?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_document');?>" method="post" name="adminForm" id="adminForm">
 	<fieldset id="filter-bar">
+
 		<div class="filter-search fltlft">
 			<label class="filter-search-lbl" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
 			<input type="text" name="filter_search" id="filter_search" value="<?php echo $this->escape($this->state->get('filter.search')); ?>" title="<?php echo JText::_('COM_DOCUMENT_FILTER_SEARCH_DESC'); ?>" />
@@ -31,6 +31,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 			<button type="submit" class="btn"><?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?></button>
 			<button type="button" onclick="document.id('filter_search').value='';this.form.submit();"><?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?></button>
 		</div>
+
 		<div class="filter-select fltrt">
 
 			<select name="filter_published" class="inputbox" onchange="this.form.submit()">
@@ -38,8 +39,8 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<?php echo JHtml::_('select.options', JHtml::_('jgrid.publishedOptions'), 'value', 'text', $this->state->get('filter.published'), true);?>
 			</select>
 
-			<select name="filter_category_id" class="inputbox" onchange="this.form.submit()">
-				<option value=""><?php echo JText::_('JOPTION_SELECT_CATEGORY');?></option>
+			<select name="filter_category_id" class="inputbox" multiple="multiple" size="1" onchange="this.form.submit()">
+				<option value="" disabled="true"><?php echo JText::_('JOPTION_SELECT_CATEGORY');?></option>
 				<?php echo JHtml::_('select.options', JHtml::_('category.options', 'com_document'), 'value', 'text', $this->state->get('filter.category_id'));?>
 			</select>
 
@@ -59,7 +60,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 			</select>
 		</div>
 	</fieldset>
-	<div class="clr"> </div>
+	<div class="clr"></div>
 
 	<table class="adminlist">
 		<thead>
@@ -68,16 +69,13 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
 				</th>
 				<th>
-					<?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'title', $listDirn, $listOrder); ?>
 				</th>
 				<th width="5%">
-					<?php echo JHtml::_('grid.sort', 'COM_DOCUMENT_HEADING_DOWNLOAD', 'a.download', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JPUBLISHED', 'published', $listDirn, $listOrder); ?>
 				</th>
 				<th width="5%">
-					<?php echo JHtml::_('grid.sort', 'JPUBLISHED', 'a.state', $listDirn, $listOrder); ?>
-				</th>
-				<th width="5%">
-					<?php echo JHtml::_('grid.sort', 'JFEATURED', 'a.featured', $listDirn, $listOrder, NULL, 'desc'); ?>
+					<?php echo JHtml::_('grid.sort', 'JFEATURED', 'featured', $listDirn, $listOrder); ?>
 				</th>
 				<th width="10%">
 					<?php echo JHtml::_('grid.sort', 'JCATEGORY', 'category_title', $listDirn, $listOrder); ?>
@@ -91,11 +89,8 @@ $saveOrder	= $listOrder == 'a.ordering';
 				<th width="10%">
 					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ACCESS', 'access_level', $listDirn, $listOrder); ?>
 				</th>
-				<th width="10%">
-					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_CREATED_BY', 'a.created_by', $listDirn, $listOrder); ?>
-				</th>
 				<th width="5%">
-					<?php echo JHtml::_('grid.sort', 'JDATE', 'a.created', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JDATE', 'created', $listDirn, $listOrder); ?>
 				</th>
 				<th width="5%">
 					<?php echo JHtml::_('grid.sort', 'JGLOBAL_HITS', 'a.hits', $listDirn, $listOrder); ?>
@@ -104,7 +99,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_LANGUAGE', 'language', $listDirn, $listOrder); ?>
 				</th>
 				<th width="1%" class="nowrap">
-					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'id', $listDirn, $listOrder); ?>
 				</th>
 			</tr>
 		</thead>
@@ -130,6 +125,7 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php echo JHtml::_('grid.id', $i, $item->id); ?>
 				</td>
 				<td>
+					<a href="<?php echo JRoute::_('index.php?option=com_document&task=document.download&id='.$item->id);?>"><?php echo JHtml::_('image', 'menu/icon-16-download.png', true);?></a>
 					<?php if ($item->checked_out) : ?>
 						<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'documents.', $canCheckin); ?>
 					<?php endif; ?>
@@ -141,9 +137,6 @@ $saveOrder	= $listOrder == 'a.ordering';
 					<?php endif; ?>
 					<p class="smallsub">
 						<?php echo JText::sprintf('JGLOBAL_LIST_ALIAS', $this->escape($item->alias));?></p>
-				</td>
-				<td class="center">
-					<a href="<?php echo JRoute::_('index.php?option=com_document&task=document.download&id='.$item->id);?>"><?php echo JHtml::_('image', 'menu/icon-16-download.png', true);?></a>
 				</td>
 				<td class="center">
 					<?php echo JHtml::_('jgrid.published', $item->state, $i, 'documents.', $canChange, 'cb', $item->publish_up, $item->publish_down); ?>

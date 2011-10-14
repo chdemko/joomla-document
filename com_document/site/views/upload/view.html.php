@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version		$Id$
+ * @version		$Id: view.html.php 122 2010-12-17 08:13:33Z marcetienne $
  * @package		Document
  * @subpackage	Component
  * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.

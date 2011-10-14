@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version		$Id$
+ * @version		$Id: view.html.php 124 2010-12-17 08:56:56Z eexit $
  * @package		Document
  * @subpackage	Component
  * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
@@ -47,16 +47,7 @@ class DocumentViewCategory extends JView
 		    die('Erreur : '.$e->getMessage());
 		}
 		
-		<form action="view.html.php" method="post">
-			<p>
-			    <input type="text" name="prenom" />
-			    <input type="submit" value="Valider" />
-			</p>
-		</form>
-
-		
-
-		$this->msg = $rqt;
+//		$this->msg = $rqt;
 		
 		
 		

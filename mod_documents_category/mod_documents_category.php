@@ -1,6 +1,6 @@
 <?php
 /**
- * @version		$Id$
+ * @version		$Id: mod_documents_category.php 171 2010-12-17 14:49:48Z aguibe01 $
  * @package		Documents
  * @subpackage	Modules
  * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.

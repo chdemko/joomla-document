@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version		$Id$
+ * @version		$Id: view.raw.php 94 2010-12-15 12:01:54Z tbonnaud $
  * @package		Document
  * @subpackage	Component
  * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
@@ -33,11 +33,13 @@ class DocumentViewDownload extends JView
 			JError::raiseError(500, implode("<br />", $errors));
 			return false;
 		}
-		if (!in_array($item->access,JFactory::getUser()->getAuthorisedViewLevels()) {
+		if (!in_array($item->access,JFactory::getUser()->getAuthorisedViewLevels()))
+		{
 			JError::raiseError(403, JText::_('JLIB_APPLICATION_ERROR_ACCESS_FORBIDDEN'));
 			return false;
 		}
-		if(!JFile::exists($item->filename){
+		if(!JFile::exists($item->filename))
+		{
 			JError::raiseError(404, JText::_('COM_DOCUMENT_ERROR_DOCUMENT_NOT_FOUND'));
 			return false;
 		}

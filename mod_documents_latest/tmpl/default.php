@@ -1,6 +1,6 @@
 <?php
 /**
- * @version		$Id$
+ * @version		$Id: default.php 126 2010-12-17 09:14:28Z aguibe01 $
  * @package		Documents
  * @subpackage	Modules
  * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.

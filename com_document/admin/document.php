@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version		$Id$
+ * @version		$Id: document.php 29 2010-12-14 09:27:10Z raggad $
  * @package		Document
  * @subpackage	Component
  * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
@@ -11,14 +11,15 @@
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
+
 // Access check.
 if (!JFactory::getUser()->authorise('core.manage', 'com_document')) 
 {
 	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
 }
 
-// require helper file
-JLoader::register('documentHelper', dirname(__FILE__) . DS . 'helpers' . DS . 'document.php');
+// require helper files
+require_once __DIR__ . '/helpers.php';
 
 // import joomla controller library
 jimport('joomla.application.component.controller');

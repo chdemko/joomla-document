@@ -1,7 +1,7 @@
 <?php 
 
 /**
- * @version		$Id$
+ * @version		$Id: edit.php 169 2010-12-17 14:47:11Z crazy_pedro $
  * @package		Document
  * @subpackage	Component
  * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.

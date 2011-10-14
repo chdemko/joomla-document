@@ -1,6 +1,6 @@
 <?php
 /**
- * @version		$Id$
+ * @version		$Id: documentpdf.php 161 2010-12-17 13:47:49Z eoriou $
  * @package		Documents
  * @subpackage	Plugins
  * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.

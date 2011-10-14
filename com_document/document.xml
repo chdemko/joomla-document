@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- $Id: document.xml 16 2010-12-08 12:59:11Z chdemko $ -->
-<extension type="component" version="1.6.0" method="upgrade">
+<extension type="component" version="2.5" method="upgrade">
 
 	<name>COM_DOCUMENT</name>
-	<!-- The following elements are optional and free of formatting conttraints -->
+	<!-- The following elements are optional and free of formatting constraints -->
 	<creationDate>December 2010</creationDate>
 	<copyright>Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.</copyright>
 	<authorEmail>document@chdemko.com</authorEmail>
@@ -55,24 +55,12 @@
 	<media destination="com_document" folder="media">
 		<filename>index.html</filename>
 		<folder>images</folder>
+		<folder>css</folder>
 	</media>
 
 	<administration>
 		<!-- Administration Menu Section -->
 		<menu img="../media/com_document/images/document-16x16.png">COM_DOCUMENT_MENU</menu>
-		<submenu>
-			<!--
-				Note that all & must be escaped to &amp; for the file to be valid
-				XML and be parsed by the installer
-			-->
-			<menu link="index.php?option=com_document" view="documents" img="../media/com_document/images/document-16x16.png"
-				alt="Document/Documents">COM_DOCUMENT_MENU</menu>
-			<menu link="index.php?option=com_categories&amp;extension=com_document"
-				view="categories" img="../media/com_document/images/document-categories-16x16.png" alt="Document/Categories">COM_DOCUMENT_CATEGORIES_MENU
-			</menu>
-			<menu link="index.php?option=com_media&amp;folder=documents"
-				img="class:media" alt="Document/Media">COM_DOCUMENT_MEDIA_MENU</menu>
-		</submenu>
 		<!-- Administration Main File Copy Section -->
 		<!-- Note the folder attribute: This attribute describes the folder
 			to copy FROM in the package to install therefore files copied

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version		$Id$
+ * @version		$Id: document.php 136 2010-12-17 09:51:23Z acoste $
  * @package		Document
  * @subpackage	Component
  * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
@@ -42,7 +42,8 @@ class documentHelper
 		JSubMenuHelper::addEntry(
 			JText::_('COM_DOCUMENT_SUBMENU_CATEGORIES'),
 			'index.php?option=com_categories&extension=com_document',
-			$vName == 'categories');
+			$vName == 'categories'
+		);
 		JSubMenuHelper::addEntry(
 			JText::_('COM_DOCUMENT_SUBMENU_FEATURED'),
 			'index.php?option=com_document&view=featured',
@@ -64,16 +65,13 @@ class documentHelper
 	 * @return	JObject
 	 * @since	1.6
 	 */
-	public static function getActions($categoryId = 0, $documentId = 0)
+	public static function getActions($documentId = 0)
 	{
 		$user	= JFactory::getUser();
 		$result	= new JObject;
 
-		if (empty($documentId) && empty($categoryId)) {
+		if (empty($documentId)) {
 			$assetName = 'com_document';
-		}
-		else if (empty($documentId)) {
-			$assetName = 'com_document.category.'.(int) $categoryId;
 		}
 		else {
 			$assetName = 'com_document.document.'.(int) $documentId;

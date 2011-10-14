@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @version		$Id$
+ * @version		$Id: controller.php 80 2010-12-15 09:08:42Z crazy_pedro $
  * @package		Document
  * @subpackage	Component
  * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
@@ -21,18 +21,10 @@ jimport('joomla.application.component.controller');
 class DocumentController extends JController
 {
 	/**
-	 * display task
+	 * The default view for the display method.
 	 *
-	 * @return void
+	 * @var    string
+	 * @since  11.1
 	 */
-	function display($cachable = false) 
-	{
-		JRequest::setVar('view', JRequest::getCmd('view', 'Documents'));
-		// call parent behavior
-		parent::display($cachable);
-		
-
-		// Set the submenu
-		HelloWorldHelper::addSubmenu('messages');
-	}
+	protected $default_view = 'documents';
 }

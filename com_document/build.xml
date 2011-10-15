@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="com_document" default="zip" basedir=".">
+	<target name="zip">
+		<zip
+			destfile="${ant.project.name}-${version}.zip"
+			excludes="*~ *.svn* ${ant.project.name}-${version}.zip"
+			basedir="."
+			update="true"
+		/>
+	</target>
+</project>

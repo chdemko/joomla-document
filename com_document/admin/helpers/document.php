@@ -30,12 +30,12 @@ class documentHelper
 	 * @param	string	$vName	The name of the active view.
 	 *
 	 * @return	void
-	 * @since	1.6
+	 * @since	0.0.1
 	 */
 	public static function addSubmenu($vName)
 	{
 		JSubMenuHelper::addEntry(
-			JText::_('JGLOBAL_DOCUMENTS'),
+			JText::_('COM_DOCUMENT_SUBMENU_DOCUMENTS'),
 			'index.php?option=com_document&view=documents',
 			$vName == 'documents'
 		);
@@ -43,16 +43,6 @@ class documentHelper
 			JText::_('COM_DOCUMENT_SUBMENU_CATEGORIES'),
 			'index.php?option=com_categories&extension=com_document',
 			$vName == 'categories'
-		);
-		JSubMenuHelper::addEntry(
-			JText::_('COM_DOCUMENT_SUBMENU_FEATURED'),
-			'index.php?option=com_document&view=featured',
-			$vName == 'featured'
-		);
-		JSubMenuHelper::addEntry(
-			JText::_('COM_DOCUMENT_UPLOAD'),
-			'index.php?option=com_document&view=upload&layout=edit',
-			$vName == 'featured'
 		);
 	}
 

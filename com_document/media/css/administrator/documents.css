@@ -2,3 +2,15 @@
 	background-image: url(../../images/document-48x48.png);
 }
 
+.icon-32-download {
+	background-image: url(../../images/download-32x32.png);
+}
+
+.jgrid span.featured {
+	background-image: url(../../images/featured-16x16.png);
+}
+
+.jgrid span.unfeatured {
+	background-image: url(../../images/unfeatured-16x16.png);
+}
+

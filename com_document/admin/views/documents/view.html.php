@@ -22,10 +22,6 @@ jimport('joomla.application.component.view');
  */
 class DocumentViewDocuments extends JView
 {
-	protected $state;
-	protected $items;
-	protected $pagination;
-
 	/**
 	 * Documents view display method
 	 * 
@@ -35,18 +31,20 @@ class DocumentViewDocuments extends JView
 	{
 		// Assign variables
 		$this->state = $this->get('State');
-		$this->items = $this->get('Item');
+		$this->items = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
 
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
-			JError::raiseError(500, implode('<br />', $errors));
-			return false;
+			throw new Exception(implode("\n", $errors));
 		}
 
 		// Set the toolbar
 		$this->addToolbar();
+
+		// Set the submenu
+		DocumentHelper::addSubmenu('documents');
 
 		// Prepare the document
 		$this->prepareDocument();
@@ -55,17 +53,26 @@ class DocumentViewDocuments extends JView
 		parent::display($tpl);
 	}
 
+	/**
+	 * Prepare the document
+	 */
 	protected function prepareDocument()
 	{
 		JHtml::_('stylesheet','com_document/administrator/documents.css', array(), true);
 	}
 
+	/**
+	 * Add a toobar
+	 */
 	protected function addToolbar()
 	{
 		$canDo = DocumentHelper::getActions();
 		$divider = false;
 
 		JToolBarHelper::title(JText::_('COM_DOCUMENT_TITLE_DOCUMENTS'), 'documents');
+
+		JToolBarHelper::custom('documents.download', 'download', 'download', 'COM_DOCUMENT_TASK_DOCUMENTS_DOWNLOAD', true);
+		JToolBarHelper::divider();
 
 		if ($canDo->get('core.create'))
 		{

@@ -55,7 +55,7 @@ public function getTable($type = 'Document', $prefix = 'DocumentTable', $config 
   }
 
 
-//Returns information about a specific file - Retourne les données d’un fichier spécifique
+//Returns information about a specific file - Retourne les donnï¿½es dï¿½un fichier spï¿½cifique
 public function getItem()
     {
       // Create a new query object.
@@ -75,4 +75,62 @@ $query->where('id ='.(int)$id);
 
      return $query;
     }
+
+	/**
+	 * Method to change the featured state of one or more records.
+	 *
+	 * @param   array    $pks    A list of the primary keys to change.
+	 * @param   integer  $value  The value of the featured state.
+	 *
+	 * @return  boolean  True on success.
+	 * @since   11.1
+	 */
+	function feature(&$pks, $value = 1)
+	{
+		// Initialise variables.
+		$dispatcher	= JDispatcher::getInstance();
+		$user		= JFactory::getUser();
+		$table		= $this->getTable();
+		$pks		= (array) $pks;
+
+		// Include the content plugins for the change of state event.
+		JPluginHelper::importPlugin('content');
+
+		// Access checks.
+		foreach ($pks as $i => $pk) {
+			$table->reset();
+
+			if ($table->load($pk)) {
+				if (!$this->canEditState($table)) {
+					// Prune items that you can't change.
+					unset($pks[$i]);
+					JError::raiseWarning(403, JText::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'));
+					return false;
+				}
+			}
+		}
+
+		// Attempt to change the state of the records.
+		if (!$table->feature($pks, $value, $user->get('id'))) {
+			$this->setError($table->getError());
+			return false;
+		}
+
+		$context = $this->option.'.'.$this->name;
+
+		// Trigger the onContentChangeState event.
+		$result = $dispatcher->trigger($this->event_change_state, array($context, $pks, $value));
+
+		if (in_array(false, $result, true)) {
+			$this->setError($table->getError());
+			return false;
+		}
+
+		// Clear the component's cache
+		$this->cleanCache();
+
+		return true;
+	}
+
+
 }

@@ -115,8 +115,8 @@ abstract class DocumentHtmlDocuments
 		$canChange = $user->authorise('core.edit.state', 'com_document.document.' . $document->id) && $canCheckin;
 
 		$states	= array(
-			0 => array('featured', 'COM_DOCUMENT_GRID_UNFEATURED', 'COM_DOCUMENT_TASK_FEATURED', 'COM_DOCUMENT_GRID_UNFEATURED', false, 'unfeatured', 'unfeatured'),
-			1 => array('unfeatured', 'COM_DOCUMENT_GRID_FEATURED', 'COM_DOCUMENT_TASK_UNFEATURED', 'COM_DOCUMENT_GRID_FEATURED', false, 'featured', 'featured'),
+			0 => array('feature', 'COM_DOCUMENT_GRID_UNFEATURED', 'COM_DOCUMENT_TASK_FEATURED', 'COM_DOCUMENT_GRID_UNFEATURED', false, 'unfeatured', 'unfeatured'),
+			1 => array('unfeature', 'COM_DOCUMENT_GRID_FEATURED', 'COM_DOCUMENT_TASK_UNFEATURED', 'COM_DOCUMENT_GRID_FEATURED', false, 'featured', 'featured'),
 		);
 		return JHtml::_('jgrid.state', $states, (int) $document->featured, $i, 'documents.', $canChange);
 	}

@@ -21,6 +21,22 @@ jimport('joomla.application.component.controlleradmin');
 class DocumentControllerDocuments extends JControllerAdmin
 {
 	/**
+	 * Constructor.
+	 *
+	 * @param   array  $config  An optional associative array of configuration settings.
+	 *
+	 * @see     JController
+	 * @since   0.0.1
+	 */
+	public function __construct($config = array())
+	{
+		parent::__construct($config);
+
+		// Define standard task mappings.
+		$this->registerTask('unfeature',	'feature');	// value = 0
+	}
+	
+	/**
 	 * Proxy for getModel.
 	 * @since	1.6
 	 */
@@ -53,6 +69,46 @@ class DocumentControllerDocuments extends JControllerAdmin
 			return $allow;
 		}
 	}
-	
+
+	function feature()
+	{
+		// Check for request forgeries
+		JRequest::checkToken() or die(JText::_('JINVALID_TOKEN'));
+
+		$session	= JFactory::getSession();
+		$registry	= $session->get('registry');
+
+		// Get items to publish from the request.
+		$cid	= JRequest::getVar('cid', array(), '', 'array');
+		$data	= array('feature' => 1, 'unfeature' => 0);
+		$task 	= $this->getTask();
+		$value	= JArrayHelper::getValue($data, $task, 0, 'int');
+
+		if (empty($cid)) {
+			JError::raiseWarning(500, JText::_($this->text_prefix.'_NO_ITEM_SELECTED'));
+		}
+		else {
+			// Get the model.
+			$model = $this->getModel();
+
+			// Make sure the item ids are integers
+			JArrayHelper::toInteger($cid);
+
+			// Feature the items.
+			if (!$model->feature($cid, $value)) {
+				JError::raiseWarning(500, $model->getError());
+			}
+			else {
+				if ($value == 1) {
+					$ntext = $this->text_prefix.'_N_ITEMS_FEATURED';
+				}
+				elseif ($value == 0) {
+					$ntext = $this->text_prefix.'_N_ITEMS_UNFEATURED';
+				}
+				$this->setMessage(JText::plural($ntext, count($cid)));
+			}
+		}
+		$this->setRedirect(JRoute::_('index.php?option=com_document', false));
+	}
 }
 

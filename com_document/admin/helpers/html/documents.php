@@ -136,6 +136,7 @@ abstract class DocumentHtmlDocuments
 	 */
 	public static function categories($i, $document, $view, $ordering, $direction)
 	{
+		$html = array();
 		foreach ($document->categories as $cat)
 		{
 			$tooltip = array ();

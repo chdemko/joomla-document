@@ -25,7 +25,19 @@ jimport('joomla.application.categories');
  */
 class DocumentModelDocuments extends JModelList
 {
-	protected $filter_fields = array('id','title','published','access_level','created','author','ordering','featured','language','hits');
+	protected $filter_fields = array('title', 'published', 'featured', 'ordering', 'access_level', 'author', 'created', 'hits', 'language_title', 'id');
+	protected $aliases = array(
+		'title' => 'a.title',
+		'published' => 'a.published',
+		'featured' => 'a.featured',
+		'ordering' => 'a.ordering',
+		'access_level' => 'ag.title',
+		'author' => 'ua.name',
+		'created' => 'a.created',
+		'hits' => 'a.hits',
+		'language_title' => 'l.title',
+		'id' => 'a.id',
+	);
 			
 	protected function populateState($ordering = 'ordering', $direction = 'asc')
 	{
@@ -49,7 +61,7 @@ class DocumentModelDocuments extends JModelList
 		$language = $this->getUserStateFromRequest($this->context.'.filter.language', 'filter_language', '');
 		$this->setState('filter.language', $language);
 		
-		parent::populateState($ordering, $direction);
+		parent::populateState($this->aliases[$ordering], $direction);
 	}
 
 	/**
@@ -203,9 +215,13 @@ class DocumentModelDocuments extends JModelList
 		$result = parent::_getList($query, $limitstart, $limit);
 		foreach ($result as $item)
 		{
+			$item->categories = array();
 			foreach (explode(',', $item->category_ids) as $catid)
 			{
-				$item->categories[] = JCategories::getInstance('Document')->get($catid);
+				if ($catid != '')
+				{				
+					$item->categories[] = JCategories::getInstance('Document')->get($catid);
+				}
 			}
 		}
 		return $result;

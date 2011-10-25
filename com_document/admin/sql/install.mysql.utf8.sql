@@ -6,9 +6,15 @@ CREATE TABLE IF NOT EXISTS `#__document` (
 		NOT NULL
 		AUTO_INCREMENT
 		COMMENT 'PK of this table',
+	`version`
+		INTEGER UNSIGNED
+		NOT NULL
+		DEFAULT '0'
+		COMMENT 'Version number',
 	`asset_id`
 		INTEGER UNSIGNED
 		NOT NULL
+		DEFAULT '0'
 		COMMENT 'FK to the #__assets table',
 	`title`
 		VARCHAR(255)
@@ -20,66 +26,11 @@ CREATE TABLE IF NOT EXISTS `#__document` (
 		CHARACTER SET utf8 COLLATE utf8_bin NOT NULL
 		DEFAULT ''
 		COMMENT 'Alias of the document used in sef mode',
-	`description`
-		TEXT
-		NOT NULL
-		DEFAULT ''
-		COMMENT 'Description of the document',
-	`author`
-		VARCHAR(255)
-		NOT NULL
-		DEFAULT ''
-		COMMENT 'Author of the document ',
-	`filename`
-		VARCHAR(255)
-		NOT NULL
-		DEFAULT ''
-		COMMENT 'Document filename',
 	`mime`
 		VARCHAR(255)
 		NOT NULL
 		DEFAULT ''
 		COMMENT 'Classification of types of files on the Internet',
-	`created`
-		DATE
-		NOT NULL
-		DEFAULT '0000-00-00 00:00:00'
-		COMMENT 'Document creation date',
-	`created_by`
-		INTEGER UNSIGNED
-		NOT NULL
-		DEFAULT '0'
-		COMMENT 'FK to the #__users table identifying the Joomla user who created the document',
-	`created_by_alias`
-		VARCHAR(255)
-		NOT NULL
-		DEFAULT ''
-		COMMENT 'String representing an alias for the author',
-	`modified`
-		DATE
-		NOT NULL
-		DEFAULT '0000-00-00 00:00:00'
-		COMMENT 'Document modification date',
-	`modified_by`
-		INTEGER UNSIGNED
-		NOT NULL
-		DEFAULT '0'
-		COMMENT 'FK to the #__users table identifying the Joomla user who modified the document',
-	`hits`
-		INTEGER UNSIGNED
-		NOT NULL
-		DEFAULT '0'
-		COMMENT 'Symbolize a number of clics on the link to download the document',
-	`params`
-		TEXT
-		NOT NULL
-		DEFAULT ''
-		COMMENT 'String that can store additional settings',
-	`language`
-		CHAR(7)
-		NOT NULL
-		DEFAULT ''
-		COMMENT 'Allow the encoding of the document language',
 	`featured`
 		TINYINT(3)
 		NOT NULL
@@ -110,32 +61,132 @@ CREATE TABLE IF NOT EXISTS `#__document` (
 		NOT NULL
 		DEFAULT '0'
 		COMMENT 'Describe the minimum level of privileges for access to the document',
-	`checked_out`
+	`hits`
 		INTEGER UNSIGNED
 		NOT NULL
 		DEFAULT '0'
-		COMMENT 'FK to the #__users table representing the user who is currently editing the document',
+		COMMENT 'Symbolize a number of clics on the link to download the document',
+	`language`
+		CHAR(7)
+		NOT NULL
+		DEFAULT ''
+		COMMENT 'Allow the encoding of the document language',
+	`params`
+		TEXT
+		NOT NULL
+		DEFAULT ''
+		COMMENT 'String that can store additional settings',
 	`checked_out_time`
 		DATE
 		NOT NULL
 		DEFAULT 0
 		DEFAULT '0000-00-00 00:00:00'
 		COMMENT 'Document edition starting date',
-	PRIMARY KEY  (`id`),
+	`checked_out`
+		INTEGER UNSIGNED
+		NOT NULL
+		DEFAULT '0'
+		COMMENT 'FK to the #__users table representing the user who is currently editing the document',
+	`created`
+		DATE
+		NOT NULL
+		DEFAULT '0000-00-00 00:00:00'
+		COMMENT 'Document creation date',
+	`created_by`
+		INTEGER UNSIGNED
+		NOT NULL
+		DEFAULT '0'
+		COMMENT 'FK to the #__users table identifying the Joomla user who created the document',
+	`created_by_alias`
+		VARCHAR(255)
+		NOT NULL
+		DEFAULT ''
+		COMMENT 'String representing an alias for the author',
+	`modified`
+		DATE
+		NOT NULL
+		DEFAULT '0000-00-00 00:00:00'
+		COMMENT 'Document modification date',
+	`modified_by`
+		INTEGER UNSIGNED
+		NOT NULL
+		DEFAULT '0'
+		COMMENT 'FK to the #__users table identifying the Joomla user who modified the document',
+	PRIMARY KEY `idx_id` (`id`),
 	UNIQUE `idx_alias` (`alias`),
 	KEY `idx_mime` (`mime`),
-	KEY `idx_created_by` (`created_by`),
-	KEY `idx_modified_by` (`modified_by`),
-	KEY `idx_created` (`created`),
-	KEY `idx_modified` (`modified`),
-	KEY `idx_hits` (`hits`),
-	KEY `idx_language` (`language`),
 	KEY `idx_featured` (`featured`),
 	KEY `idx_ordering` (`ordering`),
 	KEY `idx_published` (`published`),
-	KEY `idx_access` (`access`)  
+	KEY `idx_publish_up` (`publish_up`),
+	KEY `idx_publish_down` (`publish_down`),
+	KEY `idx_access` (`access`),
+	KEY `idx_hits` (`hits`),
+	KEY `idx_language` (`language`),
+	KEY `idx_created_by` (`created_by`),
+	KEY `idx_modified_by` (`modified_by`),
+	KEY `idx_created` (`created`),
+	KEY `idx_modified` (`modified`)
 ) DEFAULT CHARSET=utf8;
 
+-- TODO: add index on author, description
+CREATE TABLE IF NOT EXISTS `#__document_version` (
+	`document_id`
+		INTEGER UNSIGNED
+		NOT NULL
+		COMMENT 'FK to the #__document table',
+	`version`
+		INTEGER UNSIGNED
+		NOT NULL
+		COMMENT 'Version number',
+	`author`
+		VARCHAR(255)
+		NOT NULL
+		DEFAULT ''
+		COMMENT 'Author of the document ',
+	`description`
+		TEXT
+		NOT NULL
+		DEFAULT ''
+		COMMENT 'Description of the document',
+	`filename`
+		VARCHAR(255)
+		NOT NULL
+		DEFAULT ''
+		COMMENT 'Document filename',
+	`created`
+		DATE
+		NOT NULL
+		DEFAULT '0000-00-00 00:00:00'
+		COMMENT 'Document creation date',
+	`created_by`
+		INTEGER UNSIGNED
+		NOT NULL
+		DEFAULT '0'
+		COMMENT 'FK to the #__users table identifying the Joomla user who created the document',
+	`created_by_alias`
+		VARCHAR(255)
+		NOT NULL
+		DEFAULT ''
+		COMMENT 'String representing an alias for the author',
+	`modified`
+		DATE
+		NOT NULL
+		DEFAULT '0000-00-00 00:00:00'
+		COMMENT 'Document modification date',
+	`modified_by`
+		INTEGER UNSIGNED
+		NOT NULL
+		DEFAULT '0'
+		COMMENT 'FK to the #__users table identifying the Joomla user who modified the document',
+	PRIMARY KEY `idx_id_version` (`document_id`, `version`),
+	KEY `idx_created_by` (`created_by`),
+	KEY `idx_modified_by` (`modified_by`),
+	KEY `idx_created` (`created`),
+	KEY `idx_modified` (`modified`)
+) DEFAULT CHARSET=utf8;
+
+-- TODO: Add an index on keywords
 CREATE TABLE IF NOT EXISTS `#__document_keyword` (
 	`id`
 		INTEGER
@@ -168,12 +219,16 @@ CREATE TABLE IF NOT EXISTS `#__document_keyword_map` (
 		INTEGER UNSIGNED
 		NOT NULL
 		COMMENT 'FK to the #__document table',
+	`version`
+		INTEGER UNSIGNED
+		NOT NULL
+		COMMENT 'Version number',
 	`keyword_id`
 		INTEGER UNSIGNED
 		NOT NULL
 		COMMENT 'FK to the #__document_keyword table',
-	PRIMARY KEY `idx_document_keyword` (`document_id`, `keyword_id`),
-	UNIQUE `idx_keyword_document`  (`keyword_id`, `document_id`)
+	PRIMARY KEY `idx_document_keyword` (`document_id`, `version`, `keyword_id`),
+	UNIQUE `idx_keyword_document`  (`keyword_id`, `document_id`, `version`)
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__document_category_map` (

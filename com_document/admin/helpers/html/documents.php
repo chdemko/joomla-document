@@ -115,8 +115,8 @@ abstract class DocumentHtmlDocuments
 		$canChange = $user->authorise('core.edit.state', 'com_document.document.' . $document->id) && $canCheckin;
 
 		$states	= array(
-			0 => array('feature', 'COM_DOCUMENT_GRID_UNFEATURED', 'COM_DOCUMENT_TASK_FEATURED', 'COM_DOCUMENT_GRID_UNFEATURED', false, 'unfeatured', 'unfeatured'),
-			1 => array('unfeature', 'COM_DOCUMENT_GRID_FEATURED', 'COM_DOCUMENT_TASK_UNFEATURED', 'COM_DOCUMENT_GRID_FEATURED', false, 'featured', 'featured'),
+			0 => array('feature', 'COM_DOCUMENT_GRID_CELL_UNFEATURED', 'COM_DOCUMENT_TASK_FEATURED', 'COM_DOCUMENT_GRID_CELL_UNFEATURED', false, 'unfeatured', 'unfeatured'),
+			1 => array('unfeature', 'COM_DOCUMENT_GRID_CELL_FEATURED', 'COM_DOCUMENT_TASK_UNFEATURED', 'COM_DOCUMENT_GRID_CELL_FEATURED', false, 'featured', 'featured'),
 		);
 		return JHtml::_('jgrid.state', $states, (int) $document->featured, $i, 'documents.', $canChange);
 	}
@@ -147,6 +147,24 @@ abstract class DocumentHtmlDocuments
 			$html[] = JHtml::_('tooltip', implode($tooltip), $cat->title, '', $cat->title);
 		}
 		return implode('<br />', $html);
+	}
+
+	/**
+	 * Displays the version of a document
+	 *
+	 * @param	integer	$i			The row index
+	 * @param	object	$document	The document to be displayed.
+	 * @param	JView	$view		The view in which the document is displayed.
+	 * @param	string	$ordering	The ordering column
+	 * @param	string	$direction	The ordering direction
+	 *
+	 * @return	string   The required Html.
+	 *
+	 * @since	0.0.1
+	 */
+	public static function version($i, $document, $view, $ordering, $direction)
+	{
+		return JText::sprintf('COM_DOCUMENT_GRID_CELL_VERSION', $document->version, $document->max_version);
 	}
 
 	/**

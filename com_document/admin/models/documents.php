@@ -33,7 +33,7 @@ class DocumentModelDocuments extends JModelList
 		'ordering' => 'a.ordering',
 		'access_level' => 'ag.title',
 		'author' => 'ua.name',
-		'created' => 'a.created',
+		'created' => 'v.created',
 		'hits' => 'a.hits',
 		'language_title' => 'l.title',
 		'id' => 'a.id',
@@ -105,7 +105,7 @@ class DocumentModelDocuments extends JModelList
 				'list.select',
 				'a.id AS id, a.title AS title, a.alias AS alias, a.checked_out AS checked_out, a.checked_out_time AS checked_out_time' .
 				', a.published AS published, a.access AS access, a.created AS created, a.created_by AS created_by, a.ordering AS ordering'.
-				', a.featured AS featured, a.language AS language, a.hits AS hits'
+				', a.featured AS featured, a.language AS language, a.hits AS hits, a.version AS version'
 			)
 		);
 		$query->from('#__document AS a');
@@ -114,6 +114,10 @@ class DocumentModelDocuments extends JModelList
 		// Join over the language
 		$query->select('l.title AS language_title');
 		$query->join('LEFT', '`#__languages` AS l ON l.lang_code = a.language');
+
+		// Join over the version
+		$query->select('MAX(v.version) AS max_version');
+		$query->join('LEFT', '`#__document_version` AS v ON a.id = v.document_id');
 
 		// Join over the users for the checked out user.
 		$query->select('uc.name AS editor');

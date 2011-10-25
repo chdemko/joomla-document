@@ -80,6 +80,9 @@ $listDirn	= $this->state->get('list.direction');
 				<th width="10%">
 					<?php echo JText::_('JCATEGORY'); ?>
 				</th>
+				<th width="7%">
+					<?php echo JText::_('COM_DOCUMENT_GRID_HEADING_VERSION'); ?>
+				</th>
 				<th width="10%">
 					<?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ORDERING', 'ordering', $listDirn, $listOrder); ?>
 					<?php if ($listOrder == 'ordering') :?>
@@ -130,6 +133,9 @@ $listDirn	= $this->state->get('list.direction');
 				</td>
 				<td>
 					<?php echo JHtml::_('DocumentHtml.Documents.categories', $i, $item, $this, $listOrder, $listDirn);?>
+				</td>
+				<td>
+					<?php echo JHtml::_('DocumentHtml.Documents.version', $i, $item, $this, $listOrder, $listDirn);?>
 				</td>
 				<td class="order">
 					<?php echo JHtml::_('DocumentHtml.Documents.order', $i, $item, $this, $listOrder, $listDirn);?>

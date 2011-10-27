@@ -97,8 +97,7 @@ class DocumentTableDocument extends JTable {
 	 */
 	protected function _getAssetName()
 	{
-		$k = $this->_tbl_key;
-		return 'com_document.document.' . (int) $this-> $k;
+		return 'com_document.document.' . (int) $this->id;
 	}
 
 	/**
@@ -142,9 +141,6 @@ class DocumentTableDocument extends JTable {
 	 */
 	public function feature($pks = null, $state = 1, $userId = 0)
 	{
-		// Initialise variables.
-		$k = $this->_tbl_key;
-
 		// Sanitize input.
 		JArrayHelper::toInteger($pks);
 		$userId = (int) $userId;
@@ -153,9 +149,9 @@ class DocumentTableDocument extends JTable {
 		// If there are no primary keys set check to see if the instance key is set.
 		if (empty($pks))
 		{
-			if ($this->$k)
+			if ($this->id)
 			{
-				$pks = array($this->$k);
+				$pks = array($this->id);
 			}
 			// Nothing to set publishing state on, return false.
 			else
@@ -175,7 +171,7 @@ class DocumentTableDocument extends JTable {
 		$query->where('(checked_out = 0 OR checked_out = '.(int) $userId.')');
 
 		// Build the WHERE clause for the primary keys.
-		$query->where($k.' = '.implode(' OR '.$k.' = ', $pks));
+		$query->where('id IN ('.implode(',', $pks).')');
 
 		$this->_db->setQuery($query);
 
@@ -198,7 +194,7 @@ class DocumentTableDocument extends JTable {
 		}
 
 		// If the JTable instance value is in the list of primary keys that were set, set the instance.
-		if (in_array($this->$k, $pks))
+		if (in_array($this->id, $pks))
 		{
 			$this->featured = $state;
 		}
@@ -207,7 +203,6 @@ class DocumentTableDocument extends JTable {
 	}
 
 	/**
-	 * TODO: verify that the number exists
 	 * Method to set the default version for a document
 	 *
 	 * @param   integer  $number  The version number
@@ -221,9 +216,6 @@ class DocumentTableDocument extends JTable {
 	 */
 	public function setDefault($number, $pk = null, $userId = 0)
 	{
-		// Initialise variables.
-		$k = $this->_tbl_key;
-
 		// Sanitize input.
 		$pk = (int) $pk;
 		$userId = (int) $userId;
@@ -232,9 +224,9 @@ class DocumentTableDocument extends JTable {
 		// If there are no primary key set check to see if the instance key is set.
 		if (empty($pk))
 		{
-			if ($this->$k)
+			if ($this->id)
 			{
-				$pk = $this->$k;
+				$pk = $this->id;
 			}
 			// Nothing to set version number, return false.
 			else
@@ -248,13 +240,13 @@ class DocumentTableDocument extends JTable {
 		// Update the publishing state for rows with the given primary keys.
 		$query = $this->_db->getQuery(true);
 		$query->update($this->_tbl);
-		$query->set('version = '.(int) $number);
+		$query->set('version = CASE WHEN EXISTS (SELECT * FROM #__document_version WHERE document_id = '.(int)$pk.' AND number = '.(int)$number.') THEN '.(int)$number.' ELSE version END');
 
 		// Checkin support for the table.
 		$query->where('(checked_out = 0 OR checked_out = '.(int) $userId.')');
 
 		// Build the WHERE clause for the primary keys.
-		$query->where($k.' = '.$pk);
+		$query->where('id = '.(int)$pk);
 
 		$this->_db->setQuery($query);
 

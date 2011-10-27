@@ -3,7 +3,7 @@
  * @version		$Id: helper.php 171 2010-12-17 14:49:48Z aguibe01 $
  * @package		Documents
  * @subpackage	Modules
- * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
+ * @copyright	Copyright (C) 2010 - 2011 Master ICONE, University of La Rochelle, France.
  * @link		http://joomlacode.org/gf/project/document/
  * @license		http://www.gnu.org/licenses/gpl-2.0.html
  */

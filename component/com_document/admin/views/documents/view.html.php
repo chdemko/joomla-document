@@ -1,8 +1,9 @@
 <?php
 
 /**
- * @version		$Id: view.html.php 115 2010-12-17 07:18:21Z tbonnaud $
- * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
+ * @package		Document
+ * @subpackage	Component
+ * @copyright	Copyright (C) 2010 - 2011 Master ICONE, University of La Rochelle, France.
  * @link		http://joomlacode.org/gf/project/document/
  * @license		http://www.gnu.org/licenses/gpl-2.0.html
  */

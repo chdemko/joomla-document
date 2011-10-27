@@ -1,10 +1,9 @@
 <?php
 
 /**
- * @version		$Id: default.php 97 2010-12-15 12:09:35Z tbonnaud $
  * @package		Document
  * @subpackage	Component
- * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
+ * @copyright	Copyright (C) 2010 - 2011 Master ICONE, University of La Rochelle, France.
  * @link		http://joomlacode.org/gf/project/document/
  * @license		http://www.gnu.org/licenses/gpl-2.0.html
  */

@@ -4,7 +4,7 @@
  * @version		$Id: document.php 175 2010-12-17 15:04:20Z helvys $
  * @package		Document
  * @subpackage	Component
- * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
+ * @copyright	Copyright (C) 2010 - 2011 Master ICONE, University of La Rochelle, France.
  * @link		http://joomlacode.org/gf/project/document/
  * @license		http://www.gnu.org/licenses/gpl-2.0.html
  */

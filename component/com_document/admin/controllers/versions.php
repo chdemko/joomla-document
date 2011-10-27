@@ -1,10 +1,9 @@
 <?php
 
 /**
- * @version		$Id: documents.php 142 2010-12-17 12:27:20Z crazy_pedro $
  * @package		Document
  * @subpackage	Component
- * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
+ * @copyright	Copyright (C) 2010 - 2011 Master ICONE, University of La Rochelle, France.
  * @link		http://joomlacode.org/gf/project/document/
  * @license		http://www.gnu.org/licenses/gpl-2.0.html
  */
@@ -17,11 +16,16 @@ jimport('joomla.application.component.controlleradmin');
 
 /**
  * Versions Controller of Document component
+ *
+ * @package		Document
+ * @subpackage	Component
+ * @since       0.0.1
  */
 class DocumentControllerVersions extends JControllerAdmin
 {
 	/**
 	 * Proxy for getModel.
+	 *
 	 * @since	0.0.1
 	 */
 	public function getModel($name = 'Version', $prefix = 'DocumentModel') 
@@ -37,7 +41,7 @@ class DocumentControllerVersions extends JControllerAdmin
 	 *
 	 * @since   0.0.1
 	 */
-	function setDefault()
+	public function setDefault()
 	{
 		// Check for request forgeries
 		JRequest::checkToken() or die(JText::_('JINVALID_TOKEN'));
@@ -62,7 +66,7 @@ class DocumentControllerVersions extends JControllerAdmin
 			JArrayHelper::toInteger($cid);
 
 			// Feature the items.
-			if (!$model->setDefault($cid[0], $id))
+			if (!$model->setDefault($id, $cid[0]))
 			{
 				JError::raiseWarning(500, $model->getError());
 			}
@@ -74,4 +78,3 @@ class DocumentControllerVersions extends JControllerAdmin
 		$this->setRedirect(JRoute::_('index.php?option=com_document&view=versions&layout=edit&id='.(int)$id, false));
 	}
 }
-

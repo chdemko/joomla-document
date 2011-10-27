@@ -1,13 +1,12 @@
 <?php
 
 /**
-* @version        $Id$
-* @package        Document
-* @subpackage    Component
-* @copyright    Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
-* @link        http://joomlacode.org/gf/project/document/
-* @license        http://www.gnu.org/licenses/gpl-2.0.html
-*/
+ * @package		Document
+ * @subpackage	Component
+ * @copyright	Copyright (C) 2010 - 2011 Master ICONE, University of La Rochelle, France.
+ * @link		http://joomlacode.org/gf/project/document/
+ * @license		http://www.gnu.org/licenses/gpl-2.0.html
+ */
 
 // No direct access to this file
 defined('_JEXEC') or die('Restricted access');
@@ -16,25 +15,31 @@ defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.modeladmin');
 
 /**
-* Document Model of Document component
-*/
+ * Document Model of Document component
+ *
+ * @package		Document
+ * @subpackage	Component
+ * @since       0.0.1
+ */
 class DocumentModelDocument extends JModelAdmin
 {
   /**
     * Returns a reference to the a Table object, always creating it.
     *
-    * @param    type    The table type to instantiate
-    * @param    string    A prefix for the table class name. Optional.
-    * @param    array    Configuration array for model. Optional.
-    * @return    JTable    A database object
-    * @since    1.6
+    * @param   string  $type    The table type to instantiate
+    * @param   string  $prefix  A prefix for the table class name. Optional.
+    * @param   array   $config  Configuration array for model. Optional.
+    *
+    * @return  JTable           A database object
+    * @since   0.0.1
     */
   
 
-public function getTable($type = 'Document', $prefix = 'DocumentTable', $config = array())
-  {
-      return JTable::getInstance($type, $prefix, $config);
-  }
+	public function getTable($type = 'Document', $prefix = 'DocumentTable', $config = array())
+	{
+		return JTable::getInstance($type, $prefix, $config);
+	}
+
   /**
     * Method to get the record form.
     *
@@ -75,7 +80,8 @@ $query->where('id ='.(int)$id);
 
      return $query;
     }
-// TODO delete a document should delete all versions
+
+	// TODO delete a document should delete all versions
 	/**
 	 * Method to change the featured state of one or more records.
 	 *
@@ -83,7 +89,7 @@ $query->where('id ='.(int)$id);
 	 * @param   integer  $value  The value of the featured state.
 	 *
 	 * @return  boolean  True on success.
-	 * @since   11.1
+	 * @since   0.0.1
 	 */
 	function feature(&$pks, $value = 1)
 	{
@@ -135,13 +141,13 @@ $query->where('id ='.(int)$id);
 	/**
 	 * Method to change the default version.
 	 *
-	 * @param   integer  $number  The version number.
 	 * @param   integer  $pk      The primary key to change.
+	 * @param   integer  $number  The version number.
 	 *
 	 * @return  boolean  True on success.
-	 * @since   11.1
+	 * @since   0.0.1
 	 */
-	public function setDefault($number, $pk)
+	public function setDefault($pk, $number)
 	{
 		// Initialise variables.
 		$dispatcher	= JDispatcher::getInstance();

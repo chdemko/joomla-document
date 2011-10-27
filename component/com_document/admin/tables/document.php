@@ -1,10 +1,9 @@
 <?php
 
 /**
- * @version		$Id: document.php 123 2010-12-17 08:34:28Z raggad $
  * @package		Document
  * @subpackage	Component
- * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
+ * @copyright	Copyright (C) 2010 - 2011 Master ICONE, University of La Rochelle, France.
  * @link		http://joomlacode.org/gf/project/document/
  * @license		http://www.gnu.org/licenses/gpl-2.0.html
  */
@@ -17,6 +16,10 @@ jimport('joomla.database.table');
 
 /**
  * Document Table class of Document component
+ *
+ * @package		Document
+ * @subpackage	Component
+ * @since       0.0.1
  */
 class DocumentTableDocument extends JTable {
 	/**
@@ -24,44 +27,62 @@ class DocumentTableDocument extends JTable {
 	 *
 	 * @param object Database connector object
 	 */
-	public function __construct(& $db) {
-		parent :: __construct('#__document', 'id', $db);
+	public function __construct(& $db)
+	{
+		parent::__construct('#__document', 'id', $db);
 	}
 
 	/**
-	 * Overloaded bind function
+	 * Method to bind an associative array or object to the JTable instance.This
+	 * method only binds properties that are publicly accessible and optionally
+	 * takes an array of properties to ignore when binding.
 	 *
-	 * @param	   array		   named array
-	 * @return	  null|string	 null is operation was satisfactory, otherwise returns an error
-	 * @see JTable:bind
-	 * @since 1.5
+	 * @param   mixed    $src     An associative array or object to bind to the JTable instance.
+	 * @param   mixed    $ignore  An optional array or space separated list of properties
+	 *                            to ignore while binding.
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @link    http://docs.joomla.org/JTable/bind
+	 * @since   0.0.1
 	 */
-	public function bind($array, $ignore = '') {
-		if (isset ($array['params']) && is_array($array['params'])) {
+	public function bind($src, $ignore = '')
+	{
+		if (isset ($src['params']) && is_array($src['params']))
+		{
 			// Convert the params field to a string.
 			$parameter = new JRegistry;
-			$parameter->loadArray($array['params']);
-			$array['params'] = (string) $parameter;
+			$parameter->loadArray($src['params']);
+			$src['params'] = (string) $parameter;
 		}
-		return parent :: bind($array, $ignore);
+		return parent::bind($src, $ignore);
 	}
 
 	/**
-	 * Overloaded load function
+	 * Method to load a row from the database by primary key and bind the fields
+	 * to the JTable instance properties.
 	 *
-	 * @param	   int $pk primary key
-	 * @param	   boolean $reset reset data
-	 * @return	  boolean
-	 * @see JTable:load
+	 * @param   mixed    $keys   An optional primary key value to load the row by, or an array of fields to match.  If not
+	 *                           set the instance property value is used.
+	 * @param   boolean  $reset  True to reset the default values before loading the new row.
+	 *
+	 * @return  boolean  True if successful. False if row not found or on error (internal error state set in that case).
+	 *
+	 * @link    http://docs.joomla.org/JTable/load
+	 * @since   0.0.1
 	 */
-	public function load($pk = null, $reset = true) {
-		if (parent :: load($pk, $reset)) {
+	public function load($keys = null, $reset = true)
+	{
+		if (parent::load($keys, $reset))
+		{
 			// Convert the params field to a registry.
 			$params = new JRegistry;
 			$params->loadJSON($this->params);
 			$this->params = $params;
 			return true;
-		} else {
+		}
+		else
+		{
 			return false;
 		}
 	}
@@ -71,32 +92,35 @@ class DocumentTableDocument extends JTable {
 	 * The default name is in the form `table_name.id`
 	 * where id is the value of the primary key of the table.
 	 *
-	 * @return	  string
-	 * @since	   1.6
+	 * @return  string
+	 * @since	0.0.1
 	 */
-	protected function _getAssetName() {
+	protected function _getAssetName()
+	{
 		$k = $this->_tbl_key;
-		return 'com_document.message.' . (int) $this-> $k;
+		return 'com_document.document.' . (int) $this-> $k;
 	}
 
 	/**
 	 * Method to return the title to use for the asset table.
 	 *
-	 * @return	  string
-	 * @since	   1.6
+	 * @return	string
+	 * @since	0.0.1
 	 */
-	protected function _getAssetTitle() {
+	protected function _getAssetTitle()
+	{
 		return $this->title;
 	}
 
 	/**
 	 * Get the parent asset id for the record
 	 *
-	 * @return	  int
-	 * @since	   1.6
+	 * @return  int
+	 * @since	0.0.1
 	 */
-	protected function _getAssetParentId() {
-		$asset = JTable :: getInstance('Asset');
+	protected function _getAssetParentId()
+	{
+		$asset = JTable::getInstance('Asset');
 		$asset->loadByName('com_document');
 		return $asset->id;
 	}
@@ -127,15 +151,17 @@ class DocumentTableDocument extends JTable {
 		$state  = (int) $state;
 
 		// If there are no primary keys set check to see if the instance key is set.
-		if (empty($pks)) {
-			if ($this->$k) {
+		if (empty($pks))
+		{
+			if ($this->$k)
+			{
 				$pks = array($this->$k);
 			}
 			// Nothing to set publishing state on, return false.
-			else {
+			else
+			{
 				$e = new JException(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
 				$this->setError($e);
-
 				return false;
 			}
 		}
@@ -145,14 +171,8 @@ class DocumentTableDocument extends JTable {
 		$query->update($this->_tbl);
 		$query->set('featured = '.(int) $state);
 
-		// Determine if there is checkin support for the table.
-		if (property_exists($this, 'checked_out') || property_exists($this, 'checked_out_time')) {
-			$query->where('(checked_out = 0 OR checked_out = '.(int) $userId.')');
-			$checkin = true;
-		}
-		else {
-			$checkin = false;
-		}
+		// checkin support for the table.
+		$query->where('(checked_out = 0 OR checked_out = '.(int) $userId.')');
 
 		// Build the WHERE clause for the primary keys.
 		$query->where($k.' = '.implode(' OR '.$k.' = ', $pks));
@@ -160,15 +180,16 @@ class DocumentTableDocument extends JTable {
 		$this->_db->setQuery($query);
 
 		// Check for a database error.
-		if (!$this->_db->query()) {
+		if (!$this->_db->query())
+		{
 			$e = new JException(JText::sprintf('COM_DOCUMENT_DATABASE_ERROR_FEATURE_FAILED', get_class($this), $this->_db->getErrorMsg()));
 			$this->setError($e);
-
 			return false;
 		}
 
 		// If checkin is supported and all rows were adjusted, check them in.
-		if ($checkin && (count($pks) == $this->_db->getAffectedRows())) {
+		if (count($pks) == $this->_db->getAffectedRows())
+		{
 			// Checkin the rows.
 			foreach($pks as $pk)
 			{
@@ -177,18 +198,17 @@ class DocumentTableDocument extends JTable {
 		}
 
 		// If the JTable instance value is in the list of primary keys that were set, set the instance.
-		if (in_array($this->$k, $pks)) {
+		if (in_array($this->$k, $pks))
+		{
 			$this->featured = $state;
 		}
 
-		$this->setError('');
 		return true;
 	}
 
 	/**
-	 * Method to set the featuring state for a row or list of rows in the database
-	 * table.  The method respects checked out rows by other users and will attempt
-	 * to checkin rows that it can after adjustments are made.
+	 * TODO: verify that the number exists
+	 * Method to set the default version for a document
 	 *
 	 * @param   integer  $number  The version number
 	 * @param   integer  $pk      The primary key values to update.  If not
@@ -210,15 +230,17 @@ class DocumentTableDocument extends JTable {
 		$state  = (int) $state;
 
 		// If there are no primary key set check to see if the instance key is set.
-		if (empty($pk)) {
-			if ($this->$k) {
+		if (empty($pk))
+		{
+			if ($this->$k)
+			{
 				$pk = $this->$k;
 			}
 			// Nothing to set version number, return false.
-			else {
+			else
+			{
 				$e = new JException(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
 				$this->setError($e);
-
 				return false;
 			}
 		}
@@ -228,14 +250,8 @@ class DocumentTableDocument extends JTable {
 		$query->update($this->_tbl);
 		$query->set('version = '.(int) $number);
 
-		// Determine if there is checkin support for the table.
-		if (property_exists($this, 'checked_out') || property_exists($this, 'checked_out_time')) {
-			$query->where('(checked_out = 0 OR checked_out = '.(int) $userId.')');
-			$checkin = true;
-		}
-		else {
-			$checkin = false;
-		}
+		// Checkin support for the table.
+		$query->where('(checked_out = 0 OR checked_out = '.(int) $userId.')');
 
 		// Build the WHERE clause for the primary keys.
 		$query->where($k.' = '.$pk);
@@ -247,14 +263,12 @@ class DocumentTableDocument extends JTable {
 		{
 			$e = new JException(JText::sprintf('COM_DOCUMENT_DATABASE_ERROR_FEATURE_FAILED', get_class($this), $this->_db->getErrorMsg()));
 			$this->setError($e);
-
 			return false;
 		}
 
 		// If the JTable instance value is in the list of primary keys that were set, set the instance.
 		$this->version = $number;
 
-		$this->setError('');
 		return true;
 	}
 }

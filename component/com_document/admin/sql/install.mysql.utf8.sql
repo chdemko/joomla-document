@@ -1,5 +1,3 @@
--- $Id: install.mysql.utf8.sql 157 2010-12-17 13:37:27Z raggad $
-
 CREATE TABLE IF NOT EXISTS `#__document` (
 	`id`
 		INTEGER

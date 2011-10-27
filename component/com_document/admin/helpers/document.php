@@ -1,10 +1,9 @@
 <?php
 
 /**
- * @version		$Id: document.php 136 2010-12-17 09:51:23Z acoste $
  * @package		Document
  * @subpackage	Component
- * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
+ * @copyright	Copyright (C) 2010 - 2011 Master ICONE, University of La Rochelle, France.
  * @link		http://joomlacode.org/gf/project/document/
  * @license		http://www.gnu.org/licenses/gpl-2.0.html
  */
@@ -12,18 +11,15 @@
 // No direct access to this file
 defined('_JEXEC') or die;
 
-
 /**
- * document component helper.
+ * Document component helper.
  *
- * @package		Joomla.Administrator
- * @subpackage	com_document
- * @since		1.6
+ * @package		Document
+ * @subpackage	Component
+ * @since		0.0.1
  */
-class documentHelper
+class DocumentHelper
 {
-	public static $extension = 'com_document';
-
 	/**
 	 * Configure the Linkbar.
 	 *

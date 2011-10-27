@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- $Id: config.xml 111 2010-12-15 13:23:21Z acoste $ -->
 <config>
 <fieldset
                 name="greetings"

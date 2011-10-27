@@ -3,7 +3,7 @@
 /**
  * @package		Document
  * @subpackage	Component
- * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
+ * @copyright	Copyright (C) 2010 - 2011 Master ICONE, University of La Rochelle, France.
  * @link		http://joomlacode.org/gf/project/document/
  * @license		http://www.gnu.org/licenses/gpl-2.0.html
  */
@@ -16,6 +16,10 @@ jimport('joomla.application.component.controllerform');
 
 /**
  * Document Controller of Document component
+ *
+ * @package		Document
+ * @subpackage	Component
+ * @since       0.0.1
  */
 class DocumentControllerDocument extends JControllerForm
 {
@@ -35,104 +39,106 @@ class DocumentControllerDocument extends JControllerForm
 	 */
 	protected $view_list = 'documents';
 
-
-	
-	public function upload()
+/*	public function upload()
 	{
-	var_dump(COM_DOCUMENT_BASE);exit();
+		var_dump(COM_DOCUMENT_BASE);
+		exit ();
 		//JRequest::checkToken('request') or jexit(JText::_('JINVALID_TOKEN'));
 
 		// Get the user
-		$user		= JFactory::getUser();
-
-		
+		$user = JFactorygetUser();
 
 		// Get some data from the request
 		// FileName, FileSize
-		$file		= JRequest::getVar('filedata', '', 'files', 'array');
+		$file = JRequestgetVar('filedata', '', 'files', 'array');
 		// Folder on the server
-		$folder		= JRequest::getVar('folder', '', '', 'path');
-		$return		= JRequest::getVar('return-url', null, 'post', 'base64');
+		$folder = JRequestgetVar('folder', '', '', 'path');
+		$return = JRequestgetVar('return-url', null, 'post', 'base64');
 
 		// Set FTP credentials, if given
 		jimport('joomla.client.helper');
-		JClientHelper::setCredentialsFromRequest('ftp');
+		JClientHelpersetCredentialsFromRequest('ftp');
 
 		// Set the redirect
-		if ($return) {
-			$this->setRedirect(base64_decode($return).'&folder='.$folder);
+		if ($return)
+		{
+			$this->setRedirect(base64_decode($return) . '&folder=' . $folder);
 		}
 
 		// Make the filename safe
-		$file['name']	= JFile::makeSafe($file['name']);
+		$file['name'] = JFilemakeSafe($file['name']);
 
-		if (isset($file['name']))
+		if (isset ($file['name']))
 		{
 			// The request is valid
 			$err = null;
-			if (!MediaHelper::canUpload($file, $err))
+			if (!MediaHelpercanUpload($file, $err))
 			{
 				// The file can't be upload
-				JError::raiseNotice(100, JText::_($err));
+				JErrorraiseNotice(100, JText_($err));
 				return false;
 			}
-			
-			$filepath = JPath::clean(COM_DOCUMENT_BASE.DS.$folder.DS.strtolower($file['name']));
+
+			$filepath = JPathclean(COM_DOCUMENT_BASE . DS . $folder . DS . strtolower($file['name']));
 
 			// Trigger the onContentBeforeSave event.
-			JPluginHelper::importPlugin('document');
-			$dispatcher	= JDispatcher::getInstance();
+			JPluginHelperimportPlugin('document');
+			$dispatcher = JDispatchergetInstance();
 			$object_file = new JObject($file);
 			$object_file->filepath = $filepath;
-			$result = $dispatcher->trigger('onContentBeforeSave', array('com_document.file', &$object_file));
-			if (in_array(false, $result, true)) {
+			$result = $dispatcher->trigger('onContentBeforeSave', array (
+				'com_document.file',
+				& $object_file
+			));
+			if (in_array(false, $result, true))
+			{
 				// There are some errors in the plugins
-				JError::raiseWarning(100, JText::plural('COM_DOCUMENT_ERROR_BEFORE_SAVE', count($errors = $object_file->getErrors()), implode('<br />', $errors)));
+				JErrorraiseWarning(100, JTextplural('COM_DOCUMENT_ERROR_BEFORE_SAVE', count($errors = $object_file->getErrors()), implode('<br />', $errors)));
 				return false;
 			}
 			$file = (array) $object_file;
 
-			if (JFile::exists($file['filepath']))
+			if (JFileexists($file['filepath']))
 			{
 				// File exists
-				JError::raiseWarning(100, JText::_('COM_DOCUMENT_ERROR_FILE_EXISTS'));
+				JErrorraiseWarning(100, JText_('COM_DOCUMENT_ERROR_FILE_EXISTS'));
 				return false;
 			}
-
 
 			if (!$user->authorise('core.create', 'com_document'))
 			{
 				// File does not exist and user is not authorised to create
-				JError::raiseWarning(403, JText::_('COM_DOCUMENT_ERROR_CREATE_NOT_PERMITTED'));
+				JErrorraiseWarning(403, JText_('COM_DOCUMENT_ERROR_CREATE_NOT_PERMITTED'));
 				return false;
 			}
 			else
 			{
-				
+
 			}
 
-
-			if (!JFile::upload($file['tmp_name'], $file['filepath']))
+			if (!JFileupload($file['tmp_name'], $file['filepath']))
 			{
 				// Error in upload
-				JError::raiseWarning(100, JText::_('COM_DOCUMENT_ERROR_UNABLE_TO_UPLOAD_FILE'));
+				JErrorraiseWarning(100, JText_('COM_DOCUMENT_ERROR_UNABLE_TO_UPLOAD_FILE'));
 				return false;
 			}
 			else
 			{
 				// Trigger the onContentAfterSave event.
-				$dispatcher->trigger('onContentAfterSave', array('com_document.file', &$object_file));
-				$this->setMessage(JText::sprintf('COM_DOCUMENT_UPLOAD_COMPLETE', substr($file['filepath'], strlen(COM_DOCUMENT_BASE))));
+				$dispatcher->trigger('onContentAfterSave', array (
+					'com_document.file',
+					& $object_file
+				));
+				$this->setMessage(JTextsprintf('COM_DOCUMENT_UPLOAD_COMPLETE', substr($file['filepath'], strlen(COM_DOCUMENT_BASE))));
 				return true;
 			}
 		}
-
 		else
 		{
-			$this->setRedirect('index.php', JText::_('COM_DOCUMENT_INVALID_REQUEST'), 'error');
+			$this->setRedirect('index.php', JText_('COM_DOCUMENT_INVALID_REQUEST'), 'error');
 			return false;
 		}
 
 	}
-	
+*/
 }

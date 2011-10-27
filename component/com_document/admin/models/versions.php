@@ -1,8 +1,9 @@
 <?php
 
-
 /**
- * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
+ * @package		Document
+ * @subpackage	Component
+ * @copyright	Copyright (C) 2010 - 2011 Master ICONE, University of La Rochelle, France.
  * @link		http://joomlacode.org/gf/project/document/
  * @license		http://www.gnu.org/licenses/gpl-2.0.html
  */
@@ -22,8 +23,31 @@ jimport('joomla.application.component.modellist');
  */
 class DocumentModelVersions extends JModelList
 {
-	protected $filter_fields = array('a.number', 'a.created', 'a.modified', 'isdefault', 'ua.name', 'um.name');
+	/**
+	 * Valid filter fields or ordering.
+	 *
+	 * @var    array
+	 * @since  0.0.1
+	 */
+	protected $filter_fields = array(
+		'a.number',
+		'a.created',
+		'a.modified',
+		'isdefault',
+		'ua.name',
+		'um.name'
+	);
 		
+	/**
+	 * Method to auto-populate the model state.
+	 *
+	 * @param   string  $ordering   An optional ordering field.
+	 * @param   string  $direction  An optional direction (asc|desc).
+	 *
+	 * @return  void
+	 *
+	 * @since   0.0.1
+	 */
 	protected function populateState($ordering = 'a.created', $direction = 'asc')
 	{
 		// Initialise variables.
@@ -78,6 +102,9 @@ class DocumentModelVersions extends JModelList
 
 	/**
 	 * Method to return the current document
+	 *
+	 * @return  object  The current document
+	 * @since   0.0.1
 	 */
 	public function getItem()
 	{

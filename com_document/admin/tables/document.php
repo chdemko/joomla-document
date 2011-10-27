@@ -100,6 +100,7 @@ class DocumentTableDocument extends JTable {
 		$asset->loadByName('com_document');
 		return $asset->id;
 	}
+
 	/**
 	 * Method to set the featuring state for a row or list of rows in the database
 	 * table.  The method respects checked out rows by other users and will attempt
@@ -184,4 +185,76 @@ class DocumentTableDocument extends JTable {
 		return true;
 	}
 
+	/**
+	 * Method to set the featuring state for a row or list of rows in the database
+	 * table.  The method respects checked out rows by other users and will attempt
+	 * to checkin rows that it can after adjustments are made.
+	 *
+	 * @param   integer  $number  The version number
+	 * @param   integer  $pk      The primary key values to update.  If not
+	 *                            set the instance property value is used.
+	 * @param   integer  $userId  The user id of the user performing the operation.
+	 *
+	 * @return  boolean  True on success.
+	 *
+	 * @since   0.0.1
+	 */
+	public function setDefault($number, $pk = null, $userId = 0)
+	{
+		// Initialise variables.
+		$k = $this->_tbl_key;
+
+		// Sanitize input.
+		$pk = (int) $pk;
+		$userId = (int) $userId;
+		$state  = (int) $state;
+
+		// If there are no primary key set check to see if the instance key is set.
+		if (empty($pk)) {
+			if ($this->$k) {
+				$pk = $this->$k;
+			}
+			// Nothing to set version number, return false.
+			else {
+				$e = new JException(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
+				$this->setError($e);
+
+				return false;
+			}
+		}
+
+		// Update the publishing state for rows with the given primary keys.
+		$query = $this->_db->getQuery(true);
+		$query->update($this->_tbl);
+		$query->set('version = '.(int) $number);
+
+		// Determine if there is checkin support for the table.
+		if (property_exists($this, 'checked_out') || property_exists($this, 'checked_out_time')) {
+			$query->where('(checked_out = 0 OR checked_out = '.(int) $userId.')');
+			$checkin = true;
+		}
+		else {
+			$checkin = false;
+		}
+
+		// Build the WHERE clause for the primary keys.
+		$query->where($k.' = '.$pk);
+
+		$this->_db->setQuery($query);
+
+		// Check for a database error.
+		if (!$this->_db->query())
+		{
+			$e = new JException(JText::sprintf('COM_DOCUMENT_DATABASE_ERROR_FEATURE_FAILED', get_class($this), $this->_db->getErrorMsg()));
+			$this->setError($e);
+
+			return false;
+		}
+
+		// If the JTable instance value is in the list of primary keys that were set, set the instance.
+		$this->version = $number;
+
+		$this->setError('');
+		return true;
+	}
 }

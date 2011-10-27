@@ -15,8 +15,6 @@ defined('_JEXEC') or die('Restricted access');
 JHtml::addIncludePath(JPATH_COMPONENT.'/helpers/html');
 JHtml::_('behavior.tooltip');
 
-$user		= JFactory::getUser();
-$userId		= $user->get('id');
 $listOrder	= $this->state->get('list.ordering');
 $listDirn	= $this->state->get('list.direction');
 ?>
@@ -49,8 +47,8 @@ $listDirn	= $this->state->get('list.direction');
 			</select>
 
 			<select name="filter_author_id" class="inputbox" onchange="this.form.submit()">
-				<option value=""><?php echo JText::_('JOPTION_SELECT_AUTHOR');?></option>
-				<?php echo JHtml::_('select.options', $this->authors, 'value', 'text', $this->state->get('filter.author_id'));?>
+				<option value=""><?php echo JText::_('COM_DOCUMENT_OPTION_SELECT_CREATOR');?></option>
+				<?php // TODO echo JHtml::_('select.options', $this->creators, 'value', 'text', $this->state->get('filter.author_id'));?>
 			</select>
 
 			<select name="filter_language" class="inputbox" onchange="this.form.submit()">
@@ -69,13 +67,13 @@ $listDirn	= $this->state->get('list.direction');
 					<input type="checkbox" name="checkall-toggle" value="" onclick="checkAll(this)" />
 				</th>
 				<th>
-					<?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'title', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?>
 				</th>
 				<th width="7%">
-					<?php echo JHtml::_('grid.sort', 'JPUBLISHED', 'published', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JPUBLISHED', 'a.published', $listDirn, $listOrder); ?>
 				</th>
 				<th width="7%">
-					<?php echo JHtml::_('grid.sort', 'JFEATURED', 'featured', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JFEATURED', 'a.featured', $listDirn, $listOrder); ?>
 				</th>
 				<th width="10%">
 					<?php echo JText::_('JCATEGORY'); ?>
@@ -84,28 +82,28 @@ $listDirn	= $this->state->get('list.direction');
 					<?php echo JText::_('COM_DOCUMENT_GRID_HEADING_VERSION'); ?>
 				</th>
 				<th width="10%">
-					<?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ORDERING', 'ordering', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort',  'JGRID_HEADING_ORDERING', 'a.ordering', $listDirn, $listOrder); ?>
 					<?php if ($listOrder == 'ordering') :?>
 						<?php echo JHtml::_('grid.order',  $this->items, 'filesave.png', 'documents.saveorder'); ?>
 					<?php endif; ?>
 				</th>
 				<th width="10%">
-					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ACCESS', 'access_level', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ACCESS', 'ag.title', $listDirn, $listOrder); ?>
 				</th>
 				<th width="10%">
-					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_CREATED_BY', 'author', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_CREATED_BY', 'ua.name', $listDirn, $listOrder); ?>
 				</th>
 				<th width="7%">
-					<?php echo JHtml::_('grid.sort', 'JDATE', 'created', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JDATE', 'a.created', $listDirn, $listOrder); ?>
 				</th>
 				<th width="7%">
-					<?php echo JHtml::_('grid.sort', 'JGLOBAL_HITS', 'hits', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JGLOBAL_HITS', 'a.hits', $listDirn, $listOrder); ?>
 				</th>
 				<th width="7%">
-					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_LANGUAGE', 'language_title', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_LANGUAGE', 'l.title', $listDirn, $listOrder); ?>
 				</th>
 				<th width="1%" class="nowrap">
-					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'id', $listDirn, $listOrder); ?>
+					<?php echo JHtml::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?>
 				</th>
 			</tr>
 		</thead>
@@ -144,7 +142,7 @@ $listDirn	= $this->state->get('list.direction');
 					<?php echo JHtml::_('DocumentHtml.Documents.access', $i, $item, $this, $listOrder, $listDirn);?>
 				</td>
 				<td class="center">
-					<?php echo JHtml::_('DocumentHtml.Documents.author', $i, $item, $this, $listOrder, $listDirn);?>
+					<?php echo JHtml::_('DocumentHtml.Documents.creator', $i, $item, $this, $listOrder, $listDirn);?>
 				</td>
 				<td class="center nowrap">
 					<?php echo JHtml::_('DocumentHtml.Documents.date', $i, $item, $this, $listOrder, $listDirn);?>

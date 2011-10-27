@@ -12,7 +12,7 @@ defined('_JEXEC') or die;
 jimport('joomla.application.categories');
 
 /**
- * Html Documlents class
+ * Html Documents class
  *
  * @package     Document
  * @subpackage  Component
@@ -212,7 +212,7 @@ abstract class DocumentHtmlDocuments
 	}
 
 	/**
-	 * Displays the accees level of a document
+	 * Displays the access level of a document
 	 *
 	 * @param	integer	$i			The row index
 	 * @param	object	$document	The document to be displayed.
@@ -230,7 +230,7 @@ abstract class DocumentHtmlDocuments
 	}
 
 	/**
-	 * Displays the author of a document
+	 * Displays the creator of a document
 	 *
 	 * @param	integer	$i			The row index
 	 * @param	object	$document	The document to be displayed.
@@ -242,9 +242,9 @@ abstract class DocumentHtmlDocuments
 	 *
 	 * @since	0.0.1
 	 */
-	public static function author($i, $document, $view, $ordering, $direction)
+	public static function creator($i, $document, $view, $ordering, $direction)
 	{
-		return $view->escape($document->author);
+		return $view->escape($document->creator);
 	}
 
 	/**

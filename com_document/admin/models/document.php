@@ -75,7 +75,7 @@ $query->where('id ='.(int)$id);
 
      return $query;
     }
-
+// TODO delete a document should delete all versions
 	/**
 	 * Method to change the featured state of one or more records.
 	 *
@@ -132,5 +132,55 @@ $query->where('id ='.(int)$id);
 		return true;
 	}
 
+	/**
+	 * Method to change the default version.
+	 *
+	 * @param   integer  $number  The version number.
+	 * @param   integer  $pk      The primary key to change.
+	 *
+	 * @return  boolean  True on success.
+	 * @since   11.1
+	 */
+	public function setDefault($number, $pk)
+	{
+		// Initialise variables.
+		$dispatcher	= JDispatcher::getInstance();
+		$user		= JFactory::getUser();
+		$table		= $this->getTable();
 
+		// Include the content plugins for the change of state event.
+		JPluginHelper::importPlugin('content');
+
+		// Access checks.
+
+		if ($table->load($pk)) {
+			if (!$this->canEditState($table)) {
+				// Prune items that you can't change.
+				JError::raiseWarning(403, JText::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'));
+				return false;
+			}
+		}
+
+		// Attempt to change the state of the records.
+		if (!$table->setDefault($number, $pk, $user->get('id'))) {
+			$this->setError($table->getError());
+			return false;
+		}
+
+		$context = $this->option.'.'.$this->name;
+
+		// Trigger the onContentChangeState event.
+		// TODO Change the call
+		$result = $dispatcher->trigger($this->event_change_state, array($context, array($pk), $number));
+
+		if (in_array(false, $result, true)) {
+			$this->setError($table->getError());
+			return false;
+		}
+
+		// Clear the component's cache
+		$this->cleanCache();
+
+		return true;
+	}
 }

@@ -1,7 +1,6 @@
 <?php
 
 /**
- * @version		$Id: document.php 169 2010-12-17 14:47:11Z crazy_pedro $
  * @package		Document
  * @subpackage	Component
  * @copyright	Copyright (C) 2010 - today Master ICONE, University of La Rochelle, France.
@@ -20,64 +19,23 @@ jimport('joomla.application.component.controllerform');
  */
 class DocumentControllerDocument extends JControllerForm
 {
-	 /**
-	 * Method override to check if you can add a new record.
+	/**
+	 * The URL view item variable.
 	 *
-	 * @param	array	An array of input data.
-	 *
-	 * @return	boolean
-	 * @since	1.6
+	 * @var    string
+	 * @since  0.0.1
 	 */
-	
+	protected $view_item = 'versions';
 
 	/**
-	 * Method override to check if you can edit an existing record.
+	 * The URL view list variable.
 	 *
-	 * @param	array	$data	An array of input data.
-	 * @param	string	$key	The name of the key for the primary key.
-	 *
-	 * @return	boolean
-	 * @since	1.6
+	 * @var    string
+	 * @since  0.0.1
 	 */
-	protected function edit($data = array(), $key = 'id')
-	{
-		// Initialise variables.
-		$recordId	= (int) isset($data[$key]) ? $data[$key] : 0;
-		$user		= JFactory::getUser();
-		$userId		= $user->get('id');
+	protected $view_list = 'documents';
 
-		// Check general edit permission first.
-		if ($user->authorise('core.edit', 'com_document.document.'.$recordId)) {
-			return true;
-		}
 
-		// Fallback on edit.own.
-		// First test if the permission is available.
-		if ($user->authorise('core.edit.own', 'com_document.document.'.$recordId)) {
-			// Now test the owner is the user.
-			$ownerId	= (int) isset($data['created_by']) ? $data['created_by'] : 0;
-			if (empty($ownerId) && $recordId) {
-				// Need to do a lookup from the model.
-				$record		= $this->getModel()->getItem($recordId);
-
-				if (empty($record)) {
-					return false;
-				}
-
-				$ownerId = $record->created_by;
-			}
-
-			// If the owner matches 'me' then do the test.
-			if ($ownerId == $userId) {
-				return true;
-			}
-		}
-
-		// Since there is no asset tracking, revert to the component permissions.
-		return parent::allowEdit($data, $key);
-	}
-	
-	
 	
 	public function upload()
 	{
@@ -177,143 +135,4 @@ class DocumentControllerDocument extends JControllerForm
 
 	}
 	
-	
-	/**
-	 * Deletes paths from the current path
-	 *
-	 * @param string $listFolder The image directory to delete a file from
-	 * @since 1.5
-	 */
-	function delete()
-	{
-		JRequest::checkToken('request') or jexit(JText::_('JINVALID_TOKEN'));
-		$app	= JFactory::getApplication();
-		$user	= JFactory::getUser();
-
-		// Get some data from the request
-		$tmpl	= JRequest::getCmd('tmpl');
-		$paths	= JRequest::getVar('rm', array(), '', 'array');
-		$folder = JRequest::getVar('folder', '', '', 'path');
-
-		if ($tmpl == 'component') {
-			// We are inside the iframe
-			$this->setRedirect('index.php?option=com_document&view=mediaList&folder='.$folder.'&tmpl=component');
-		} else {
-			$this->setRedirect('index.php?option=com_document&folder='.$folder);
-		}
-
-		if (!$user->authorise('core.delete','com_document'))
-		{
-			// User is not authorised to delete
-			JError::raiseWarning(403, JText::_('JLIB_APPLICATION_ERROR_DELETE_NOT_PERMITTED'));
-			return false;
-		}
-		else
-		{
-			// Set FTP credentials, if given
-			jimport('joomla.client.helper');
-			JClientHelper::setCredentialsFromRequest('ftp');
-
-			// Initialise variables.
-			$ret = true;
-
-			if (count($paths))
-			{
-				JPluginHelper::importPlugin('content');
-				$dispatcher	= JDispatcher::getInstance();
-				foreach ($paths as $path)
-				{
-					if ($path !== JFile::makeSafe($path))
-					{
-						// filename is not safe
-						$filename = htmlspecialchars($path, ENT_COMPAT, 'UTF-8');
-						JError::raiseWarning(100, JText::sprintf('COM_DOCUMENT_ERROR_UNABLE_TO_DELETE_FILE_WARNFILENAME', substr($filename, strlen(COM_MEDIA_BASE))));
-						continue;
-					}
-
-					$fullPath = JPath::clean(COM_MEDIA_BASE.DS.$folder.DS.$path);
-					$object_file = new JObject(array('filepath' => $fullPath));
-					if (is_file($fullPath))
-					{
-						// Trigger the onContentBeforeDelete event.
-						$result = $dispatcher->trigger('onContentBeforeDelete', array('com_document.file', &$object_file));
-						if (in_array(false, $result, true)) {
-							// There are some errors in the plugins
-							JError::raiseWarning(100, JText::plural('COM_DOCUMENT_ERROR_BEFORE_DELETE', count($errors = $object_file->getErrors()), implode('<br />', $errors)));
-							continue;
-						}
-
-						$ret &= JFile::delete($fullPath);
-
-						// Trigger the onContentAfterDelete event.
-						$dispatcher->trigger('onContentAfterDelete', array('com_document.file', &$object_file));
-						$this->setMessage(JText::sprintf('COM_DOCUMENT_DELETE_COMPLETE', substr($fullPath, strlen(COM_MEDIA_BASE))));
-					}
-					else if (is_dir($fullPath))
-					{
-						if (count(JFolder::files($fullPath, '.', true, false, array('.svn', 'CVS','.DS_Store','__MACOSX'), array('index.html', '^\..*','.*~'))) == 0)
-						{
-							// Trigger the onContentBeforeDelete event.
-							$result = $dispatcher->trigger('onContentBeforeDelete', array('com_document.folder', &$object_file));
-							if (in_array(false, $result, true)) {
-								// There are some errors in the plugins
-								JError::raiseWarning(100, JText::plural('COM_DOCUMENT_ERROR_BEFORE_DELETE', count($errors = $object_file->getErrors()), implode('<br />', $errors)));
-								continue;
-							}
-
-							$ret &= JFolder::delete($fullPath);
-
-							// Trigger the onContentAfterDelete event.
-							$dispatcher->trigger('onContentAfterDelete', array('com_document.folder', &$object_file));
-							$this->setMessage(JText::sprintf('COM_DOCUMENT_DELETE_COMPLETE', substr($fullPath, strlen(COM_MEDIA_BASE))));
-						}
-						else
-						{
-							//This makes no sense...
-							JError::raiseWarning(100, JText::sprintf('COM_DOCUMENT_ERROR_UNABLE_TO_DELETE_FOLDER_NOT_EMPTY',substr($fullPath, strlen(COM_MEDIA_BASE))));
-						}
-					}
-				}
-			}
-			return $ret;
-		}
-	}
-	
-	function featured()
-	{
-		// Check for request forgeries
-		JRequest::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-
-		// Initialise variables.
-		$user	= JFactory::getUser();
-		$ids	= JRequest::getVar('cid', array(), '', 'array');
-		$values	= array('featured' => 1, 'unfeatured' => 0);
-		$task	= $this->getTask();
-		$value	= JArrayHelper::getValue($values, $task, 0, 'int');
-
-		// Access checks.
-		foreach ($ids as $i => $id)
-		{
-			if (!$user->authorise('core.edit.state', 'com_document.document.'.(int) $id)) {
-				// Prune items that you can't change.
-				unset($ids[$i]);
-				JError::raiseNotice(403, JText::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'));
-			}
-		}
-
-		if (empty($ids)) {
-			JError::raiseWarning(500, JText::_('JERROR_NO_ITEMS_SELECTED'));
-		}
-		else {
-			// Get the model.
-			$model = $this->getModel();
-
-			// Publish the items.
-			if (!$model->featured($ids, $value)) {
-				JError::raiseWarning(500, $model->getError());
-			}
-		}
-
-		$this->setRedirect('index.php?option=com_document&view=documents');
-	}
 }

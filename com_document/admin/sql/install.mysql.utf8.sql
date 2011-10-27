@@ -97,21 +97,6 @@ CREATE TABLE IF NOT EXISTS `#__document` (
 		NOT NULL
 		DEFAULT '0'
 		COMMENT 'FK to the #__users table identifying the Joomla user who created the document',
-	`created_by_alias`
-		VARCHAR(255)
-		NOT NULL
-		DEFAULT ''
-		COMMENT 'String representing an alias for the author',
-	`modified`
-		DATE
-		NOT NULL
-		DEFAULT '0000-00-00 00:00:00'
-		COMMENT 'Document modification date',
-	`modified_by`
-		INTEGER UNSIGNED
-		NOT NULL
-		DEFAULT '0'
-		COMMENT 'FK to the #__users table identifying the Joomla user who modified the document',
 	PRIMARY KEY `idx_id` (`id`),
 	UNIQUE `idx_alias` (`alias`),
 	KEY `idx_mime` (`mime`),
@@ -124,9 +109,7 @@ CREATE TABLE IF NOT EXISTS `#__document` (
 	KEY `idx_hits` (`hits`),
 	KEY `idx_language` (`language`),
 	KEY `idx_created_by` (`created_by`),
-	KEY `idx_modified_by` (`modified_by`),
-	KEY `idx_created` (`created`),
-	KEY `idx_modified` (`modified`)
+	KEY `idx_created` (`created`)
 ) DEFAULT CHARSET=utf8;
 
 -- TODO: add index on author, description
@@ -135,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `#__document_version` (
 		INTEGER UNSIGNED
 		NOT NULL
 		COMMENT 'FK to the #__document table',
-	`version`
+	`number`
 		INTEGER UNSIGNED
 		NOT NULL
 		COMMENT 'Version number',
@@ -164,11 +147,6 @@ CREATE TABLE IF NOT EXISTS `#__document_version` (
 		NOT NULL
 		DEFAULT '0'
 		COMMENT 'FK to the #__users table identifying the Joomla user who created the document',
-	`created_by_alias`
-		VARCHAR(255)
-		NOT NULL
-		DEFAULT ''
-		COMMENT 'String representing an alias for the author',
 	`modified`
 		DATE
 		NOT NULL

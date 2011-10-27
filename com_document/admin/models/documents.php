@@ -25,21 +25,9 @@ jimport('joomla.application.categories');
  */
 class DocumentModelDocuments extends JModelList
 {
-	protected $filter_fields = array('title', 'published', 'featured', 'ordering', 'access_level', 'author', 'created', 'hits', 'language_title', 'id');
-	protected $aliases = array(
-		'title' => 'a.title',
-		'published' => 'a.published',
-		'featured' => 'a.featured',
-		'ordering' => 'a.ordering',
-		'access_level' => 'ag.title',
-		'author' => 'ua.name',
-		'created' => 'v.created',
-		'hits' => 'a.hits',
-		'language_title' => 'l.title',
-		'id' => 'a.id',
-	);
+	protected $filter_fields = array('a.title', 'a.published', 'a.featured', 'a.ordering', 'ag.title', 'ua.name', 'a.created', 'a.hits', 'l.title', 'a.id');
 			
-	protected function populateState($ordering = 'ordering', $direction = 'asc')
+	protected function populateState($ordering = 'a.ordering', $direction = 'asc')
 	{
 		// Initialise variables.
 
@@ -61,7 +49,7 @@ class DocumentModelDocuments extends JModelList
 		$language = $this->getUserStateFromRequest($this->context.'.filter.language', 'filter_language', '');
 		$this->setState('filter.language', $language);
 		
-		parent::populateState($this->aliases[$ordering], $direction);
+		parent::populateState($ordering, $direction);
 	}
 
 	/**
@@ -116,7 +104,7 @@ class DocumentModelDocuments extends JModelList
 		$query->join('LEFT', '`#__languages` AS l ON l.lang_code = a.language');
 
 		// Join over the version
-		$query->select('MAX(v.version) AS max_version');
+		$query->select('MAX(v.number) AS max_version');
 		$query->join('LEFT', '`#__document_version` AS v ON a.id = v.document_id');
 
 		// Join over the users for the checked out user.
@@ -124,7 +112,7 @@ class DocumentModelDocuments extends JModelList
 		$query->join('LEFT', '#__users AS uc ON uc.id=a.checked_out');
 
 		// Join over the users for the creator.
-		$query->select('ua.name AS author');
+		$query->select('ua.name AS creator');
 		$query->join('LEFT', '#__users AS ua ON ua.id=a.created_by');
 
 		// Join over the asset groups.

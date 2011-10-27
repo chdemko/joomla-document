@@ -70,6 +70,13 @@ class DocumentControllerDocuments extends JControllerAdmin
 		}
 	}
 
+	/**
+	 * Method to toggle to featured a list of document
+	 *
+	 * @return  void
+	 *
+	 * @since   0.0.1
+	 */
 	function feature()
 	{
 		// Check for request forgeries

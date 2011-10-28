@@ -52,7 +52,7 @@ class DocumentModelVersions extends JModelList
 	{
 		// Initialise variables.
 
-		$id = JRequest::getInt('id');
+		$id = $this->getUserStateFromRequest($this->context . '.document.id', 'id', 0, 'int');
 		$this->setState('document.id', $id);
 		
 		parent::populateState($ordering, $direction);
@@ -73,7 +73,7 @@ class DocumentModelVersions extends JModelList
 		$query->select(
 			$this->getState(
 				'list.select',
-				'a.document_id, a.number, a.created, a.created_by, a.modified, a.modified_by'
+				'a.id, a.document_id, a.number, a.created, a.created_by, a.modified, a.modified_by'
 			)
 		);
 		$query->from('#__document_version AS a');

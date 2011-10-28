@@ -9,6 +9,11 @@ CREATE TABLE IF NOT EXISTS `#__document` (
 		NOT NULL
 		DEFAULT '0'
 		COMMENT 'Version number',
+	`max_version`
+		INTEGER UNSIGNED
+		NOT NULL
+		DEFAULT '0'
+		COMMENT 'Maximum version number',
 	`asset_id`
 		INTEGER UNSIGNED
 		NOT NULL
@@ -112,6 +117,11 @@ CREATE TABLE IF NOT EXISTS `#__document` (
 
 -- TODO: add index on author, description
 CREATE TABLE IF NOT EXISTS `#__document_version` (
+	`id`
+		INTEGER
+		NOT NULL
+		AUTO_INCREMENT
+		COMMENT 'PK of this table',
 	`document_id`
 		INTEGER UNSIGNED
 		NOT NULL
@@ -155,7 +165,8 @@ CREATE TABLE IF NOT EXISTS `#__document_version` (
 		NOT NULL
 		DEFAULT '0'
 		COMMENT 'FK to the #__users table identifying the Joomla user who modified the document',
-	PRIMARY KEY `idx_id_version` (`document_id`, `version`),
+	PRIMARY KEY (`id`),
+	UNIQUE `idx_id_version` (`document_id`, `version`),
 	KEY `idx_created_by` (`created_by`),
 	KEY `idx_modified_by` (`modified_by`),
 	KEY `idx_created` (`created`),

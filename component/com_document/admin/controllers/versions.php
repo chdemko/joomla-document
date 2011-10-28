@@ -24,6 +24,14 @@ jimport('joomla.application.component.controlleradmin');
 class DocumentControllerVersions extends JControllerAdmin
 {
 	/**
+	 * The prefix to use with controller messages.
+	 *
+	 * @var    string
+	 * @since  0.0.1
+	 */
+	protected $text_prefix = 'COM_DOCUMENT_VERSIONS';
+
+	/**
 	 * Proxy for getModel.
 	 *
 	 * @since	0.0.1

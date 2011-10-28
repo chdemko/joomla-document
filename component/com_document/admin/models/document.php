@@ -142,24 +142,25 @@ $query->where('id ='.(int)$id);
 	 * Method to change the default version.
 	 *
 	 * @param   integer  $pk      The primary key to change.
-	 * @param   integer  $number  The version number.
+	 * @param   integer  $id      The version.
 	 *
 	 * @return  boolean  True on success.
 	 * @since   0.0.1
 	 */
-	public function setDefault($pk, $number)
+	public function setDefault($pk, $id)
 	{
 		// Initialise variables.
 		$dispatcher	= JDispatcher::getInstance();
 		$user		= JFactory::getUser();
 		$table		= $this->getTable();
+		$version    = $this->getTable('Version');
 
 		// Include the content plugins for the change of state event.
 		JPluginHelper::importPlugin('content');
 
 		// Access checks.
 
-		if ($table->load($pk)) {
+		if ($table->load($pk) && $version->load($id)) {
 			if (!$this->canEditState($table)) {
 				// Prune items that you can't change.
 				JError::raiseWarning(403, JText::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'));
@@ -168,7 +169,7 @@ $query->where('id ='.(int)$id);
 		}
 
 		// Attempt to change the state of the records.
-		if (!$table->setDefault($number, $pk, $user->get('id'))) {
+		if (!$table->setDefault($version->number, $pk, $user->get('id'))) {
 			$this->setError($table->getError());
 			return false;
 		}
@@ -177,7 +178,7 @@ $query->where('id ='.(int)$id);
 
 		// Trigger the onContentChangeState event.
 		// TODO Change the call
-		$result = $dispatcher->trigger($this->event_change_state, array($context, array($pk), $number));
+		$result = $dispatcher->trigger($this->event_change_state, array($context, array($pk), $version->number));
 
 		if (in_array(false, $result, true)) {
 			$this->setError($table->getError());

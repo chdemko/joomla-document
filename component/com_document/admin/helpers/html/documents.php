@@ -167,7 +167,7 @@ abstract class DocumentHtmlDocuments
 	 */
 	public static function version($i, $document, $view, $ordering, $direction)
 	{
-		return JText::sprintf('COM_DOCUMENT_GRID_CELL_VERSION', $document->version, $document->max_version);
+		return JText::sprintf('COM_DOCUMENT_GRID_CELL_VERSION', $document->version, $document->max_version, $document->count_version);
 	}
 
 	/**

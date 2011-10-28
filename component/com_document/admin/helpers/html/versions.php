@@ -36,7 +36,7 @@ abstract class DocumentHtmlVersions
 	 */
 	public static function checkbox($i, $version, $view, $ordering, $direction)
 	{
-		return JHtml::_('grid.id', $i, $version->number);
+		return JHtml::_('grid.id', $i, $version->id);
 	}
 
 	/**

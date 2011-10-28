@@ -119,7 +119,7 @@ class DocumentModelDocuments extends JModelList
 		// Select the required fields from the table.
 		$query->select($this->getState('list.select', 'a.id AS id, a.title AS title, a.alias AS alias, a.checked_out AS checked_out, a.checked_out_time AS checked_out_time' .
 		', a.published AS published, a.access AS access, a.created AS created, a.created_by AS created_by, a.ordering AS ordering' .
-		', a.featured AS featured, a.language AS language, a.hits AS hits, a.version AS version'));
+		', a.featured AS featured, a.language AS language, a.hits AS hits, a.version AS version, a.max_version as max_version'));
 		$query->from('#__document AS a');
 		$query->group('a.id');
 
@@ -128,7 +128,7 @@ class DocumentModelDocuments extends JModelList
 		$query->join('LEFT', '`#__languages` AS l ON l.lang_code = a.language');
 
 		// Join over the version
-		$query->select('MAX(v.number) AS max_version');
+		$query->select('COUNT(*) AS count_version');
 		$query->join('LEFT', '`#__document_version` AS v ON a.id = v.document_id');
 
 		// Join over the users for the checked out user.

@@ -21,7 +21,8 @@ jimport('joomla.database.table');
  * @subpackage	Component
  * @since       0.0.1
  */
-class DocumentTableDocument extends JTable {
+class DocumentTableDocument extends JTable
+{
 	/**
 	 * Constructor
 	 *

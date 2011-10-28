@@ -31,7 +31,7 @@ class DocumentViewVersions extends JView
 	public function display($tpl = null)
 	{
 		// Set the layout
-		$this->setLayout('edit');
+		$this->setLayout(JRequest::getCmd('layout', 'edit'));
 
 		// Assign variables
 		$this->state = $this->get('State');

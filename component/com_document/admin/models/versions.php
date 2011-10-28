@@ -53,6 +53,10 @@ class DocumentModelVersions extends JModelList
 		// Initialise variables.
 
 		$id = $this->getUserStateFromRequest($this->context . '.document.id', 'id', 0, 'int');
+		if (empty($id))
+		{
+			$this->setError(JText::_('COM_DOCUMENT_ERROR_DOCUMENT_EMPTY_ID'));
+		}
 		$this->setState('document.id', $id);
 		
 		parent::populateState($ordering, $direction);

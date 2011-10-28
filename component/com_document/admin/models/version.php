@@ -24,6 +24,14 @@ jimport('joomla.application.component.modeladmin');
 class DocumentModelVersion extends JModelAdmin
 {
 	/**
+	 * The version item.
+	 *
+	 * @var    object
+	 * @since  0.0.1
+	 */
+	protected $item;
+
+	/**
 	 * Method to test whether a record can be deleted.
 	 *
 	 * @param   object   $record  A record object.
@@ -79,5 +87,57 @@ class DocumentModelVersion extends JModelAdmin
 		}
 
 		return $form;
+	}
+
+	/**
+	 * Method to get the data that should be injected in the form.
+	 *
+	 * @return  array    The default data is an empty array.
+	 * @since   0.0.1
+	 */
+	protected function loadFormData()
+	{
+		// Check the session for previously entered form data.
+		$data = JFactory::getApplication()->getUserState('com_document.edit.version.data', array());
+
+		if (empty($data)) {
+			$data = $this->getItem();
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Method to get a single record.
+	 *
+	 * @param   integer  $pk  The id of the primary key.
+	 *
+	 * @return  mixed    Object on success, false on failure.
+	 * @since   0.0.1
+	 */
+	public function getItem($pk = null)
+	{
+		if (!isset($this->item))
+		{
+			if ($this->item = parent::getItem($pk))
+			{
+				$document = $this->getTable('Document');
+				if ($document->load($this->item->document_id))
+				{
+					$this->item->title = $document->title;
+					$this->item->alias = $document->alias;
+					$this->item->featured = $document->featured;
+					$this->item->published = $document->published;
+					$this->item->language = $document->language;
+					$this->item->checked_out = $document->checked_out;
+					$this->item->checked_out_time = $document->checked_out_time;
+				}
+				else
+				{
+					$this->item = false;
+				}
+			}		
+		}
+		return $this->item;
 	}
 }

@@ -60,35 +60,6 @@ class DocumentTableDocument extends JTable
 	}
 
 	/**
-	 * Method to load a row from the database by primary key and bind the fields
-	 * to the JTable instance properties.
-	 *
-	 * @param   mixed    $keys   An optional primary key value to load the row by, or an array of fields to match.  If not
-	 *                           set the instance property value is used.
-	 * @param   boolean  $reset  True to reset the default values before loading the new row.
-	 *
-	 * @return  boolean  True if successful. False if row not found or on error (internal error state set in that case).
-	 *
-	 * @link    http://docs.joomla.org/JTable/load
-	 * @since   0.0.1
-	 */
-	public function load($keys = null, $reset = true)
-	{
-		if (parent::load($keys, $reset))
-		{
-			// Convert the params field to a registry.
-			$params = new JRegistry;
-			$params->loadJSON($this->params);
-			$this->params = $params;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	/**
 	 * Method to compute the default name of the asset.
 	 * The default name is in the form `table_name.id`
 	 * where id is the value of the primary key of the table.

@@ -59,7 +59,7 @@ class DocumentViewDocuments extends JView
 	 */
 	protected function prepareDocument()
 	{
-		JHtml::_('stylesheet','com_document/administrator/documents.css', array(), true);
+		JHtml::_('stylesheet','com_document/administrator/document.css', array(), true);
 	}
 
 	/**

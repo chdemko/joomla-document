@@ -52,7 +52,7 @@ class DocumentViewVersions extends JView
 		// Prepare the document
 		$this->prepareDocument();
 
-		// Display the template
+		// Display the template		
 		parent::display($tpl);
 	}
 
@@ -61,7 +61,7 @@ class DocumentViewVersions extends JView
 	 */
 	protected function prepareDocument()
 	{
-		JHtml::_('stylesheet','com_document/administrator/documents.css', array(), true);
+		JHtml::_('stylesheet','com_document/administrator/document.css', array(), true);
 	}
 
 	/**

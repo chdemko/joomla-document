@@ -109,12 +109,6 @@ class DocumentViewVersions extends JView
 		JToolBarHelper::cancel('document.cancel', 'JTOOLBAR_CLOSE');
 		JToolBarHelper::divider();
 
-		if ($canDo->get('core.admin'))
-		{
-			JToolBarHelper::preferences('com_document');
-			JToolBarHelper::divider();
-		}
-
 		JToolBarHelper::help('JHELP_DOCUMENT_VERSIONS_MANAGER');
 	}
 }

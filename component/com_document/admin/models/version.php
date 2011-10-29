@@ -131,6 +131,12 @@ class DocumentModelVersion extends JModelAdmin
 					$this->item->language = $document->language;
 					$this->item->checked_out = $document->checked_out;
 					$this->item->checked_out_time = $document->checked_out_time;
+					$query = $this->_db->getQuery(true);
+					$query->select('category_id');
+					$query->from('#__document_category_map');
+					$query->where('document_id = ' . (int)$this->item->document_id);
+					$this->_db->setQuery($query);
+					$this->item->catid = $this->_db->loadColumn();
 				}
 				else
 				{

@@ -23,12 +23,6 @@ jimport('joomla.application.component.controller');
  */
 class DocumentController extends JController
 {
-	private $_checkIds = array(
-		'versions:edit' => 'com_document.edit.document',
-		'versions:' => 'com_document.edit.document',
-		'version:edit' => 'com_document.edit.version',
-	);
-
 	/**
 	 * The default view for the display method.
 	 *
@@ -38,10 +32,7 @@ class DocumentController extends JController
 	protected $default_view = 'documents';
 
 	/**
-	 * Typical view method for MVC based architecture
-	 *
-	 * This function is provide as a default implementation, in most cases
-	 * you will need to override it in your own controllers.
+	 * Display method
 	 *
 	 * @param   boolean  $cachable   If true, the view output will be cached
 	 * @param   array    $urlparams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
@@ -51,11 +42,21 @@ class DocumentController extends JController
 	 */
 	public function display($cachable = false, $urlparams = false)
 	{
-		$view		= JRequest::getCmd('view');
-		$layout 	= JRequest::getCmd('layout');
-		$id			= JRequest::getInt('id');
+		$view = JRequest::getCmd('view');
+		$error = false;
+		switch ($view)
+		{
+			case 'version':
+				$id = JRequest::getInt('id');
+				$error = !$this->checkEditId('com_document.edit.version', $id);
+			break;
+			case 'versions':
+				$id = JRequest::getInt('id', JFactory::getApplication()->getUserState('com_document.versions.document.id'));
+				$error = !$this->checkEditId('com_document.edit.document', $id);
+			break;
+		}
 		
-		if (isset($this->_checkIds[$view.':'.$layout]) && !$this->checkEditId($this->_checkIds[$view.':'.$layout], $id))
+		if ($error)
 		{
 			// Somehow the person just went to the form - we don't allow that.
 			$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
@@ -64,6 +65,9 @@ class DocumentController extends JController
 
 			return $this;
 		}
-		return parent::display($cachable, $urlparams);
+		else
+		{
+			return parent::display($cachable, $urlparams);
+		}
 	}
 }

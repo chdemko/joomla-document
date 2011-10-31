@@ -86,6 +86,8 @@ class DocumentModelVersions extends JModelList
 		// Join over the document table
 		$query->leftJoin('#__document as d ON d.id=a.document_id');
 		$query->select('d.version=a.number as isdefault');
+		$query->select('d.checked_out AS checked_out');
+		$query->select('d.checked_out_time AS checked_out_time');
 
 		// Join over the users for the creator.
 		$query->select('ua.name AS creator');

@@ -65,11 +65,11 @@ abstract class DocumentHtmlDocuments
 		{
 			$html[] = JHtml::_('jgrid.checkedout', $i, $document->editor, $document->checked_out_time, 'documents.', $canCheckin);
 		}
-		$canCheckin = $user->authorise('core.manage', 'com_checkin') || $document->checked_out == $user->id || $document->checked_out == 0;
 		if ($canEdit || $canEditOwn)
 		{
 			$html[] = '<a href="' . JRoute::_('index.php?option=com_document&task=document.edit&id=' . $document->id) . '">' . $view->escape($document->title) . '</a>';
-		} else
+		}
+		else
 		{
 			$html[] = $view->escape($document->title);
 		}
@@ -203,11 +203,13 @@ abstract class DocumentHtmlDocuments
 					$html[] = '<span>' . $view->pagination->orderDownIcon($i, $view->pagination->total, true, 'documents.orderup', 'JLIB_HTML_MOVE_DOWN', $ordering) . '</span>';
 				}
 				$html[] = '<input type="text" name="order[]" size="5" value="' . $document->ordering . '" disabled="disabled" class="text-area-order" />';
-			} else
+			}
+			else
 			{
 				$html[] = '<input type="text" name="order[]" size="5" value="' . $document->ordering . '" class="text-area-order" />';
 			}
-		} else
+		}
+		else
 		{
 			$html[] = $document->ordering;
 		}
@@ -304,7 +306,8 @@ abstract class DocumentHtmlDocuments
 		if ($document->language == '*')
 		{
 			return JText::alt('JALL', 'language');
-		} else
+		}
+		else
 		{
 			return empty ($document->language_title) ? JText::_('JUNDEFINED') : $view->escape($document->language_title);
 		}

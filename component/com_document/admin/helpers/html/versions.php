@@ -54,7 +54,18 @@ abstract class DocumentHtmlVersions
 	 */
 	public static function number($i, $version, $view, $ordering, $direction)
 	{
-		return $version->number;
+		$user = JFactory::getUser();
+		$canEdit = $user->authorise('core.edit', 'com_document.document.' . $version->document_id);
+		$canEditOwn = $user->authorise('core.edit.own', 'com_document.document.' . $version->document_id) && $version->created_by == $user->id;
+		if ($canEdit || $canEditOwn)
+		{
+			$html[] = '<a href="' . JRoute::_('index.php?option=com_document&task=version.edit&id=' . $version->id) . '">' . $version->number . '</a>';
+		}
+		else
+		{
+			$html[] = $version->number;
+		}
+		return implode($html);
 	}
 
 	/**

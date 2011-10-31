@@ -23,6 +23,12 @@ jimport('joomla.application.component.controller');
  */
 class DocumentController extends JController
 {
+	private $_checkIds = array(
+		'versions:edit' => 'com_document.edit.document',
+		'versions:' => 'com_document.edit.document',
+		'version:edit' => 'com_document.edit.version',
+	);
+
 	/**
 	 * The default view for the display method.
 	 *
@@ -30,4 +36,34 @@ class DocumentController extends JController
 	 * @since  11.1
 	 */
 	protected $default_view = 'documents';
+
+	/**
+	 * Typical view method for MVC based architecture
+	 *
+	 * This function is provide as a default implementation, in most cases
+	 * you will need to override it in your own controllers.
+	 *
+	 * @param   boolean  $cachable   If true, the view output will be cached
+	 * @param   array    $urlparams  An array of safe url parameters and their variable types, for valid values see {@link JFilterInput::clean()}.
+	 *
+	 * @return  JController  A JController object to support chaining.
+	 * @since   0.0.1
+	 */
+	public function display($cachable = false, $urlparams = false)
+	{
+		$view		= JRequest::getCmd('view');
+		$layout 	= JRequest::getCmd('layout');
+		$id			= JRequest::getInt('id');
+		
+		if (isset($this->_checkIds[$view.':'.$layout]) && !$this->checkEditId($this->_checkIds[$view.':'.$layout], $id))
+		{
+			// Somehow the person just went to the form - we don't allow that.
+			$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
+			$this->setMessage($this->getError(), 'error');
+			$this->setRedirect(JRoute::_('index.php?option=com_document', false));
+
+			return $this;
+		}
+		return parent::display($cachable, $urlparams);
+	}
 }

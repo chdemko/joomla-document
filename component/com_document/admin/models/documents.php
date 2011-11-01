@@ -244,7 +244,7 @@ class DocumentModelDocuments extends JModelList
 		foreach ($result as $item)
 		{
 			$item->categories = array ();
-			foreach (explode(',', $item->category_ids) as $catid)
+			foreach (array_unique(explode(',', $item->category_ids)) as $catid)
 			{
 				if ($catid != '')
 				{

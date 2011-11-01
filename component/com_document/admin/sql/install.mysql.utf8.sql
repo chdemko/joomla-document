@@ -50,12 +50,12 @@ CREATE TABLE IF NOT EXISTS `#__document` (
 		DEFAULT '0'
 		COMMENT 'Integer indicating document status',
 	`publish_up`
-		DATE
+		DATETIME
 		NOT NULL
 		DEFAULT '0000-00-00 00:00:00'
 		COMMENT 'Document publication starting date',
 	`publish_down`
-		DATE
+		DATETIME
 		NOT NULL
 		DEFAULT '0000-00-00 00:00:00'
 		COMMENT 'Document publication ending date',
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `#__document` (
 		DEFAULT ''
 		COMMENT 'Allow the encoding of the document language',
 	`checked_out_time`
-		DATE
+		DATETIME
 		NOT NULL
 		DEFAULT 0
 		DEFAULT '0000-00-00 00:00:00'
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `#__document` (
 		DEFAULT '0'
 		COMMENT 'FK to the #__users table representing the user who is currently editing the document',
 	`created`
-		DATE
+		DATETIME
 		NOT NULL
 		DEFAULT '0000-00-00 00:00:00'
 		COMMENT 'Document creation date',
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `#__document` (
 		DEFAULT '0'
 		COMMENT 'FK to the #__users table identifying the Joomla user who created the document',
 	`modified`
-		DATE
+		DATETIME
 		NOT NULL
 		DEFAULT '0000-00-00 00:00:00'
 		COMMENT 'Document modification date',
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `#__document_version` (
 		DEFAULT ''
 		COMMENT 'Document filename',
 	`created`
-		DATE
+		DATETIME
 		NOT NULL
 		DEFAULT '0000-00-00 00:00:00'
 		COMMENT 'Document creation date',
@@ -168,7 +168,7 @@ CREATE TABLE IF NOT EXISTS `#__document_version` (
 		DEFAULT '0'
 		COMMENT 'FK to the #__users table identifying the Joomla user who created the document',
 	`modified`
-		DATE
+		DATETIME
 		NOT NULL
 		DEFAULT '0000-00-00 00:00:00'
 		COMMENT 'Document modification date',

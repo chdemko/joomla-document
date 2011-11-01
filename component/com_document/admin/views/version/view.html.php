@@ -68,10 +68,10 @@ class DocumentViewVersion extends JView
 		JRequest::setVar('hidemainmenu', true);
 
 		$user		= JFactory::getUser();
-		$checkedOut	= $this->item->checked_out != 0 && $this->item->checked_out != $user->id;
-		$canDo		= DocumentHelper::getActions($this->item->id);
+		$checkedOut	= $this->item->document->checked_out != 0 && $this->item->document->checked_out != $user->id;
+		$canDo		= DocumentHelper::getActions($this->item->version->id);
 
-		JToolBarHelper::title(JText::sprintf('COM_DOCUMENT_TITLE_VERSION_EDIT', $this->item->document_id, $this->item->number), 'version');
+		JToolBarHelper::title(JText::sprintf('COM_DOCUMENT_TITLE_VERSION_EDIT', $this->item->version->document_id, $this->item->version->number), 'version');
 
 		// If not checked out, can save the item.
 		if (!$checkedOut && $canDo->get('core.edit'))

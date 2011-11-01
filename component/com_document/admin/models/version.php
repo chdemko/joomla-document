@@ -54,6 +54,49 @@ class DocumentModelVersion extends JModelAdmin
 		return $user->authorise('core.delete', $this->option);
 	}
 
+	/**
+	 * Method to check-out a row for editing.
+	 *
+	 * @param   integer  $pk	The numeric id of the primary key.
+	 *
+	 * @return  boolean	False on failure or error, true otherwise.
+	 * @since   0.0.1
+	 */
+	public function checkout($pk = null)
+	{
+		// Only attempt to check the row in if it exists.
+		if ($pk) {
+			$user = JFactory::getUser();
+
+			// Get an instance of the row to checkout.
+			$table = $this->getTable();
+			if (!$table->load($pk)) {
+				$this->setError($table->getError());
+				return false;
+			}
+
+			$document = $this->getTable('Document');
+			if (!$document->load($table->document_id)) {
+				$this->setError($document->getError());
+				return false;
+			}
+
+			// Check if this is the user having previously checked out the row.
+			if ($document->checked_out > 0 && $document->checked_out != $user->get('id')) {
+				$this->setError(JText::_('JLIB_APPLICATION_ERROR_CHECKOUT_USER_MISMATCH'));
+				return false;
+			}
+
+			// Attempt to check the row out.
+			if (!$document->checkout($user->get('id'), $table->document_id)) {
+				$this->setError($document->getError());
+				return false;
+			}
+		}
+
+		return true;
+	}
+
   /**
     * Returns a reference to the a Table object, always creating it.
     *
@@ -119,31 +162,176 @@ class DocumentModelVersion extends JModelAdmin
 	{
 		if (!isset($this->item))
 		{
-			if ($this->item = parent::getItem($pk))
+			if ($version = parent::getItem($pk))
 			{
 				$document = $this->getTable('Document');
-				if ($document->load($this->item->document_id))
+				if ($document->load($version->document_id))
 				{
-					$this->item->title = $document->title;
-					$this->item->alias = $document->alias;
-					$this->item->featured = $document->featured;
-					$this->item->published = $document->published;
-					$this->item->language = $document->language;
-					$this->item->checked_out = $document->checked_out;
-					$this->item->checked_out_time = $document->checked_out_time;
 					$query = $this->_db->getQuery(true);
 					$query->select('category_id');
 					$query->from('#__document_category_map');
-					$query->where('document_id = ' . (int)$this->item->document_id);
+					$query->where('document_id = ' . (int) $version->document_id);
 					$this->_db->setQuery($query);
-					$this->item->catid = $this->_db->loadColumn();
+					$document->catid = $this->_db->loadColumn();
+					$this->item = (object) array(
+						'version' => (object) $version->getProperties(),
+						'document' => (object) $document->getProperties(),
+						'params' => $version->params
+					);
 				}
 				else
 				{
 					$this->item = false;
 				}
-			}		
+			}
 		}
 		return $this->item;
+	}
+
+	/**
+	 * Method to save the form data.
+	 *
+	 * @param   array  $data  The form data.
+	 *
+	 * @return  boolean  True on success, False on error.
+	 * @since   0.0.1
+	 */
+	public function save($data)
+	{
+		// Initialise variables;
+		$dispatcher = JDispatcher::getInstance();
+
+		// Include the content plugins for the on save events.
+		JPluginHelper::importPlugin('content');
+
+		// Allow an exception to be thrown.
+		try
+		{
+			$table = $this->getTable();
+			$pk = (!empty($data['id'])) ? $data['id'] : (int)$this->getState($this->getName().'.id');
+
+			// Load the row
+			if (!$table->load($pk))
+			{
+				$this->setError(JText::_('COM_DOCUMENT_ERROR_UNEXISTING_ID'));
+				return false;
+			}
+
+			// Bind the data.
+			$version = $data['version'];
+			$version['params'] = empty($data['params']) ? null : $data['params'];
+			if (!$table->bind($version))
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+
+			// Prepare the row for saving
+			$this->prepareTable($table);
+
+			// Check the data.
+			if (!$table->check())
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+
+			// Trigger the onContentBeforeSave event.
+			$result = $dispatcher->trigger($this->event_before_save, array($this->option.'.'.$this->name, &$table, false));
+			if (in_array(false, $result, true))
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+
+			// Store the data.
+			if (!$table->store())
+			{
+				$this->setError($table->getError());
+				return false;
+			}
+
+			// Clean the cache.
+			$this->cleanCache();
+
+			// Trigger the onContentAfterSave event.
+			$dispatcher->trigger($this->event_after_save, array($this->option.'.'.$this->name, &$table, false));
+
+			$this->setState($this->getName().'.id', $table->id);
+	
+			$document = $this->getTable('Document');
+
+			// Load the row
+			if (!$document->load($table->document_id))
+			{
+				$this->setError(JText::_('COM_DOCUMENT_ERROR_UNEXISTING_ID'));
+				return false;
+			}
+
+			// Bind the data.
+			if (!$document->bind($data['document']))
+			{
+				$this->setError($document->getError());
+				return false;
+			}
+
+			// Prepare the row for saving
+			$this->prepareTable($document);
+
+			// Check the data.
+			if (!$document->check())
+			{
+				$this->setError($document->getError());
+				return false;
+			}
+
+			// Trigger the onContentBeforeSave event.
+			$result = $dispatcher->trigger($this->event_before_save, array($this->option.'.'.$this->name, &$document, false));
+			if (in_array(false, $result, true))
+			{
+				$this->setError($document->getError());
+				return false;
+			}
+
+			// Store the data.
+			if (!$document->store())
+			{
+				$this->setError($document->getError());
+				return false;
+			}
+
+			// Clean the cache.
+			$this->cleanCache();
+
+			// Trigger the onContentAfterSave event.
+			$dispatcher->trigger($this->event_after_save, array($this->option.'.'.$this->name, &$document, false));
+
+			// Deal with categories
+			$query = $this->_db->getQuery(true);
+			$query->delete();
+			$query->from('#__document_category_map');
+			$query->where('document_id = ' . (int) $pk);
+			$this->_db->setQuery($query);
+			$this->_db->query();
+
+			$query = $this->_db->getQuery(true);
+			$query->insert('#__document_category_map');
+			foreach ($data['document']['catid'] as $catid)
+			{
+				$query->values($pk . ',' . $catid);
+			}
+			$this->_db->setQuery($query);
+			$this->_db->query();
+
+			$this->setState($this->getName().'.id', $pk);
+
+			return true;
+		}
+		catch (Exception $e)
+		{
+			$this->setError($e->getMessage());
+
+			return false;
+		}
 	}
 }
